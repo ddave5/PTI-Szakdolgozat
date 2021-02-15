@@ -1,0 +1,20 @@
+%A \chapter* parancs nem ad a fejezetnek sorszámot
+\chapter*{Feladatkiírás}
+%A tartalomjegyzékben mégis szerepeltetni kell, mint szakasz(section) szerepeljen:
+\addcontentsline{toc}{section}{Feladatkiírás}
+
+Feladatgeneráló program készítése relációs adatmodell sémáinak normalizálásához
+
+Az Adatbázisok kurzuson fontos hangsúlyt kap az relációs adatbázissémák normalizálása. A kurzus keretén belül, ebből a témakörből is zárthelyi dolgozatot írnak a hallgatók. Jelen szakdolgozati téma ezt hivatott segíteni.
+
+A jelentkező feladata olyan Moodle plugin modul írása, amely az alábbi funkciókat látja el:
+\begin{itemize}
+    \item Feladatgenerálás különböző nehézségi szinten:
+    \begin{itemize}
+        \item relációs adatbázisséma és funkcionális függőséghalmaz generálása a feladatokhoz
+    \end{itemize}
+    \item A generált feladatok normalizálása 2. normálformába, 3. normálformába és Boyce-Codd normálformába.
+    \item A feladatokat a Moodle felületén meg kell oldania a tanulónak, be kell tudni adni a megoldást, amelyet a rendszernek el kell tárolnia.
+    \item A tanárnak látnia kell a beküldött feladatokat.
+\end{itemize}
+A hallgatói megoldások kiértékelését nem kell megvalósítani, azt egy másik program végzi.

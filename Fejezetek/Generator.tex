@@ -1,0 +1,254 @@
+\chapter{A feladatok generálása}
+
+\section{Általános gondolat}
+Mivel minden adatbázis más és más logika mentén épül fel, így az első dolog, amit meg kell valósítani, hogy a feladatok legyenek eltérőek. Ha véletlenszerű lenne a függéshalmaz generálása, abban az esetben létrejöhet könnyebben, szinte ránézésre megoldható és nehezebb, sokkal nagyobb rálátást igénylő feladat is. Emiatt érdemes sémákat készíteni, amelyeket felcímkézünk "könnyű", "közepes", illetve "nehéz" feladatokként, és ezek alapján készíteni a generátorokat. \par
+A következő, amit érdemes figyelembe venni, hogy mennyi attribútumból és mennyi függőségből álljon egy relációs modell. Lehet olyan feladatokat is csinálni, ahol kevesebb függőség van, így olyan attribútumok is lesznek, amelyek egyik függésben sem szerepelnek, illetve lehet olyan is, ahol egy függőség könnyen levezethető egy másikból, vagy éppen csak nem fogjuk használni. Vegyük erre az alábbi példát: legyen $R(a,b,c)$ relációs séma, a függéshalmaz pedig a következő:
+\begin{center}
+    $\{a\} \longrightarrow \{c\}$, $\{b\} \longrightarrow \{c\}$, $\{a,b\} \longrightarrow \{c\}$
+\end{center}
+Ebben az esetben az $\{a,b\} \rightarrow \{c\}$ függés nem fog kelleni. Ez bonyolíthat egy feladatot, de nem fogja segíteni a normalizálás módszerét, így ezeket a típusú feladatokat nem fog generálni. \par
+A következő 4 fajta feladattípus van megvalósítva:
+\begin{itemize}
+    \item Egyszerű, ahol a függésekből szinte azonnal látszik, hogy melyik fogja sérteni a \textbf{2NF} és \textbf{3NF} normalizálást. Ezek szoktak lenni a ZH feladatok, így a diákok tudnak készülni és gyakorolni ezen feladatok alapján.
+    \item Dupla, ahol a függéseket 2 felé lehet venni és a két csoport egyértelműen mutatja a \nfk-et és \nfh-et sértő függéseket.
+    \item Összetett, ahol több attribútum is szerepel a függések jobb-, illetve baloldalán. Ezek megoldása már igényel rutint és nem látszik egyértelműen, hogy hogyan kell felbontani az eredeti relációsémát.
+    \item Zártság, ahol nem elég végignézni azt, hogy melyik függés sértheti a \nfk-et vagy a \nfh-et, hanem azt is meg kell vizsgálni, hogyha az a függés alapján szedjük szét, akkor tényleg a relációs modell teljesíti az adott normálformát.
+\end{itemize}
+
+Ezenkívül minden feladat esetén szabályokat vezetünk be, amely alapján történik a generálás. Ezek a szabályok:
+\begin{itemize}
+    \item Mennyi attribútumból álljon feladat,
+    \item Mennyi kulcsa legyen a relációsémának,
+    \item Legyen-e több elsődleges elem, mint amennyi kulcselem van,
+    \item Mennyi függésből álljon, azok teljes vagy részleges függések legyenek-e,
+    \item Az egyes függések milyen logika mentén legyenek felépítve, illetve mennyi elem legyen a bal- és jobboldalakon. 
+\end{itemize}
+Végezetül pedig vezessünk be pár jelölést:
+\begin{itemize}
+    \item $Fg\rightarrow Bo, Fg \rightarrow Jo$ egy függés bal-, és jobboldala.
+    \item $K$ a kulcsok halmaza
+\end{itemize}
+
+\section{Egyszerű feladat bemutatása}
+
+\subsection{Általános szemlélet}
+Egyszerűbb feladat esetén a függések vizsgálatánál is egyértelműen fog látszani, hogy melyek lehetnek sértőek a \nfk-re, \nfh-re és a \BCNF-re.
+\begin{pld}
+    Legyen $R(\underline{a},b,c,d,e,f,\underline{g})$ és legyen $F$:
+    \begin{center}
+        $\{a\} \longrightarrow \{b,d,e\}$ \break
+        $\{a,g\} \longrightarrow \{f\}$ \break
+        $\{d,e\} \longrightarrow \{b,c\}$ \break
+    \end{center}
+    és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor látszik, hogy az $\{a\} \rightarrow \{b,d,e\}$ függés sérti a \nfk-t, mivel nem minden másodlagos attribútum függ teljesen bármely kulcstól. Emiatt ezen függés felbontása esetén kapjuk az alábbi felbontást:
+    \begin{center}
+        $R_1(\underline{a},f,\underline{g})$ \break
+        $R_2(\underline{a},b,c,d,e)$
+    \end{center}
+    A \textbf{3NF} esetén látni lehet, hogy $\{a\} \rightarrow \{b,d,e\}$ és $\{d,e\} \rightarrow \{b,c\}$ fogja sérteni, mivel található tranzitív függés az attribútumok közt. Emiatt a \nfh-nek megfelelő relációs modell
+    \begin{center}
+        $R_1(\underline{a},f,\underline{g})$ \break
+        $R_2(\underline{a},\underline{d},\underline{e})$ \break
+        $R_3(b,c,\underline{d},\underline{e})$
+    \end{center}
+    alakú. \par
+    A \textbf{BCNF} alakra hozáshoz pedig a relációs modellt nem kell változtatni, mivel $R1$ az $\{a,g\} \rightarrow \{f\}$ függésből, $R2$ az $\{a\} \rightarrow \{d,e\}$ függésből, illetve $R3$ a $\{d,e\} \rightarrow \{b,c\}$ függésből adódik.
+\end{pld}
+A példán keresztül látható, hogy minden függést felhasználunk, illetve minden függés egyértelműen meghatározza, hogy melyik normálformát sérti. Emiatt ez a feladat jó gyakorló feladat lehet.
+
+\subsection{Generáló algoritmus}
+
+Az egyszerű feladat esetén a szabályok meghatározása a következő:
+\begin{itemize}
+    \item $7-9$ attribútuma legyen a relációnak,
+    \item $\floor*{\frac{n}{3}}$ darab kulcs legyen, ahol $n$ attribútumok száma,
+    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item $3$ függésből álljon: kettő részleges, egy teljes függésből,
+    \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
+    \item $1. $ függés: $\big \{ 1 \text{ és } (|K|-1) \text{ közötti elem} \big\} \longrightarrow \big\{ n-5 \text{ db elem} \big \}$
+    \item $2.$ függés: $\big\{ a_i \in A \big| a_i \in 1.Fg \rightarrow Jo  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \in A \backslash (K \cup 1.Fg \rightarrow Jo)  \big\}$ 
+    \item $2. $ függés: $\big \{ 1 \text{ és } (1.Fg\rightarrow Jo - 1) \text{ közötti elem} \big\} \longrightarrow \big\{ 1 \text { és } ( (|A \backslash (K \cup 1.Fg \rightarrow Jo)| - 1)  \text{ közötti elem} \big \}$
+    \item $3.$ függés: $\big\{ K \big\} \longrightarrow \big\{  a_i \in A \big| a_i \not\in (1.Fg \cup 2.Fg)  \big\}$ 
+    \item $3. $ függés: $\big \{ |K| \text{ db elem} \big\} \longrightarrow \big\{|A \backslash (1.Fg \cup 2.Fg)| \text{ db elem} \big \}$
+\end{itemize}
+
+Azáltal, hogy az attribútumszám és a függéseken belüli elemszámok nem állandóak, a gondolatmenet kevésbé kiismerhető, csak kellő idővel, de addigra már a tanuló meg is tanulta a tananyagot. 
+
+\section{Dupla feladat bemutatása}
+
+\subsection{Általános szemlélet}
+Dupla feladat esetén a megoldáshoz nem csak egy függés van, amely sérti a \nfk-et és a \nfh-et. Így elsődleges feladata ennek a típusnak, hogy ne csak keressen egy függést, amely sérti a normálformákat, hanem ellenőrizze, hogy az adott relációs modell már teljesíti-e, vagy még mindig van-e benne sértő függés
+\begin{pld}
+    Legyen $R(a,\underline{b},c,\underline{d},e,f,g,h,\underline{i})$ és legyen $F$:
+    \begin{center}
+        $\{b,i\} \longrightarrow \{a,e,h\}$ \break
+        $\{d\} \longrightarrow \{c,e,g,f\}$ \break
+        $\{c,f\} \longrightarrow \{e,g\}$ \break
+        $\{h\} \longrightarrow \{a\}$ \break
+    \end{center}
+    és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor láthatjuk, hogy a  $\{b,i\} \longrightarrow \{a,e,h\}$ sérti a \nfk-t, így e mentén bontva a relációs modellt a következő jön létre:
+    \begin{center}
+        $R_1(a,\underline{b},e,h,\underline{i})$ \break
+        $R_2(\underline{b},c,\underline{d},f,g,\underline{i})$
+    \end{center}
+    Viszont látható, hogy $R_2$ még mindig nincs \nfk-ben, mert sérti $\{d\} \longrightarrow \{c,g,f\}$. Így e mentén felbontjuk $R_2$-t:
+    \begin{center}
+        $R_1(\underline{b},\underline{d},\underline{i})$\break
+        $R_2(a,\underline{b},e,h,\underline{i})$ \break
+        $R_3(c,\underline{d},f,g)$\break
+    \end{center}
+    és így minden séma \nfk-ben van.\par
+    \textbf{3NF} esetén a $\{c,f\} \longrightarrow \{g\}$ és a $\{h\} \longrightarrow \{a\}$ függések is sértik. Így ezek alapján a felbontás:
+    \begin{center}
+        $R_1(\underline{b},\underline{d},\underline{i})$\break
+        $R_2(\underline{b},e,\underline{h},\underline{i})$ \break
+        $R_3(\underline{c},\underline{d},\underline{f})$\break
+        $R_4(\underline{c},\underline{f},g)$\break
+        $R_5(a,\underline{h})$\break
+    \end{center}
+    és így minden séma \nfh-ban van.\par
+    Illetve észrevehető, hogy a minden relációséma egy függésből ered, amelynek a szuperkulcsai a függések baloldalai, így minden séma \BCNF-ben van.
+\end{pld}
+
+\subsection{Generáló algoritmus}
+
+A dupla feladat esetén a következő szabályokat tartjuk be:
+\begin{itemize}
+    \item $9$ attribútuma legyen a relációnak,
+    \item $3$ darab kulcs legyen,
+    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item $4$ függésből álljon: négy részleges függésből,
+    \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
+    \item $1.$ függés: $\big \{ (|K|-1) \text{ db elem} \big\} \longrightarrow \big\{ 3 \text{ és } 4 \text{ közötti elem} \big \}$
+    \item $2.$ függés: $\big\{ a_i \in A \big| a_i \in 1.Fg \rightarrow Jo  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \in (1.Fg \rightarrow Jo \backslash 2.Fg \rightarrow Bo)  \big\}$ 
+    \item $2.$ függés: $\big \{ 1 \text{ és } (1.Fg\rightarrow Jo - 1) \text{ közötti elem} \big\} \longrightarrow \big\{ 1 \text { és } |(1.Fg \rightarrow Jo \backslash 2.Fg \rightarrow Bo)|  \text{ közötti elem} \big \}$
+    \item $3.$ függés: $\big\{ K \backslash 1.Fg\rightarrow Bo \big\} \longrightarrow \big\{  a_i \in A \big| a_i \in (R \backslash 1.Fg)  \big\}$
+    \item $3.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{|A \backslash (K \cup 1.Fg \rightarrow Jo) \text{ db elem} \big \}$
+    \item $4.$ függés: $\big\{ a_i \in A \big| a_i \in 3.Fg\rightarrow Jo \big\} \longrightarrow \big\{ 3.Fg\rightarrow Jo \backslash 4.Fg\rightarrow Bo\big\}$
+    \item $4.$ függés: $\big \{ 1 \text{ és } (3.Fg\rightarrow Jo - 1) \text{ közötti elem} \big\} \longrightarrow \big\{ 1 \text { és } |(A \ (K \cup 1.Fg \rightarrow Jo \cup 4.Fg \rightarrow Bo)|  \text{ közötti elem} \big \}$
+\end{itemize}
+
+Azáltal, hogy a függéseken belüli elemszámok nem állandóak, a gondolatmenet kevésbé kiismerhető. Ennél a generátornál a sémára könnyebben rá lehet ismerni, ha valaki ismeri az egyszerű feladatok gondolatmeneteit, viszont ennek ellenére is ad újat a tanulóknak.
+
+\section{Összetett feladat bemutatása}
+
+\subsection{Általános szemlélet}
+
+Ennél a feladattípus csak azoknak ajánlatos, akik a másik két feladatot meg tudták csinálni. Ami miatt ez a feladattípus nehezebb, mint az előzőek, érdemes megvizsgálni az attribútumok elhelyezkedését. Legyen $ls$ azon attribútumok halmaza, amelyek csak a függőségek bal oldalán található, $rs$ amelyek csak a jobb oldalon és $lr$ pedig amelyek mindkét helyen.
+Egyszerű feladat esetén:
+\begin{center}
+    $ls = \{$a,g$\}$ \break
+    $rs = \{$b,c,f$\}$ \break
+    $lr = \{$d,e$\}$
+\end{center}
+Dupla feladat esetén: 
+\begin{center}
+    $ls = \{$b,d,i$\}$ \break
+    $rs = \{$a,e,g$\}$ \break
+    $lr = \{$c,f,h$\}$
+\end{center}
+
+Mindkét esetben látszik, hogy $ls$ a kulcsok halmaza lesz, $lr$ pedig azok az elemeket tartalmazza, melyek azon függőségek bal oldalán található, amely sérti a \nfh-et. Ha ezt a gondolatot ismerjük, akkor elég gyorsan meg tudjuk csinálni ezeket a feladattípusokat.
+Viszont az Összetett feladat esetén más lesz a helyzet:
+
+\begin{pld}
+Legyen $R(\underline{a},b,\underline{c},d,e,f,g)$ és legyen $F$:
+\begin{center}
+    $\{a\} \longrightarrow \{d,e\}$ \break
+    $\{c,e\} \longrightarrow \{b,f\}$ \break
+    $\{d,f\} \longrightarrow \{g\}$ \break
+\end{center}
+A \nfk-re hozáshoz elsőnek a $\{a\} \longrightarrow \{d,e\}$ függés alapján kell egy darabolást csinálni a relációos modellen, így pedig
+\begin{center}
+    $R_1(\underline{a},d,e)$ \break
+    $R_2(\underline{a},b,\underline{c},f,g).$ \break
+\end{center}
+Ezzel teljesül is a \nfk, viszont érdemes megvizsgálni a  $\{c\} \longrightarrow \{b,f\}$ függést is $R_2$ben. Mivel  $\{c,e\} \longrightarrow \{b,f\}$ és $\{f\} \longrightarrow \{g\}$, így ezen felbontások mentén pont $R_2$-t kapnánk, ezért vagyunk kész.
+\textbf{3NF} esetén keressük meg azt a függőségpárt, amely problémás lehet. Kulcsból kell indulni, amelyre csak a $\{a\} \longrightarrow \{d,e\}$ és $\{c,e\} \longrightarrow \{b,f\}$  teljesül. Viszont külön külön egyik sem lesz tranzitív függésben $\{d,f\} \longrightarrow \{g\}$-zel, így a séma már \nfh-ban is van.
+Legutolsónak viszont meg kell vizsgálni, hogy teljesül-e a \textbf{BCNF} is. $R_1$ esetén igen, mivel $\{a\} \longrightarrow \{d,e\}$ következik, és $'a'$ a relációséma szuperkulcsa. Mindazonáltal $R_2$-nél más a helyzet. 
+$\{c\} \longrightarrow \{b,f\}$ függés biztosan sérti a \BCNF-et, mivel nem a teljes kulcsból történik a függés, így a megfelelő relációs modell:
+\begin{center}
+    $R_1(\underline{a},d,e)$ \break
+    $R_2(\underline{a},\underline{c},g)$ \break
+    $R_3(b,\underline{c},f)$
+\end{center}
+és így már megfelelő a \textbf{BCNF} alak.
+\end{pld}
+
+A példa után nézzük meg, hogy az $ls$, $rs$ és $lr$ halmazok hogyan néznek ki:
+\begin{center}
+    $ls = \{$a,c$\}$ \break
+    $rs = \{$b,g$\}$ \break
+    $lr = \{$d,e,f$\}$
+\end{center}
+
+A kulcs még mindig az $ls$ halmazzal egyezik meg, de az $lr$ halmazra nem teljesül, hogy a \textbf{3NF} sértő függések bal oldali attribútumaival egyezik meg. Így ezen feladatok már egy nagyobb és pontosabb rálátást igényelnek.
+
+\subsection{Generáló algoritmus}
+Az összetett feladat esetén a következő szabályokat tartjuk be:
+\begin{itemize}
+    \item $7-8$ attribútuma legyen a relációnak,
+    \item $2$ darab kulcs legyen,
+    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item $3$ függésből álljon: három részleges függésből,
+    \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
+    \item $1.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{ 2 \text{ db elem} \big \}$
+    \item $2.$ függés: $\big\{ a_i \in A \big| a_i \in 1.Fg \rightarrow Jo \cup (K \backslash 1.Fg \rightarrow Bo )  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \not \in (1.Fg \rightarrow Jo \cup K)  \big\}$ 
+    \item $2.$ függés: $\big \{ |K \backslash 1.Fg \rightarrow Bo| \text{ db elem} \big\} \longrightarrow \big\{ 2 \text{ db elem} \big \}$
+    \item $3.$ függés: $\big\{ ((1.Fg \rightarrow Jo \backslash 2.Fg \rightarrow Bo.) \cup  2.Fg \rightarrow Jo) \big\} \longrightarrow \big\{  a_i \in A  \big| a_i \in (A \backslash (K \cup 1.Fg \rightarrow Jo \cup 2. Fg \rightarrow Jo)) \big\}$
+    \item $3.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{|A \backslash (K \cup 1.Fg \rightarrow Jo \cup 2. Fg \rightarrow Jo)| \text{ db elem} \big \}$
+\end{itemize}
+
+\section{Zárt feladat bemutatása}
+
+\subsection{Általános szemlélet}
+
+A zárt feladatok esetén a gondolatmenet azon alapszik, hogy nem közvetlen egy függőség fogja sérteni a \nfk-t, hanem egy részkulcs zárt halmazának megállapítása lesz a kulcs. 
+
+\begin{pld}
+Legyen $R(\underline{a},b,c,\underline{d},e,f,g)$ és legyen $F$:
+\begin{center}
+    $\{d\} \longrightarrow \{b,c,f,g\}$ \break
+    $\{f\} \longrightarrow \{d,e\}$ \break
+    $\{b,c\} \longrightarrow \{g\}$ \break
+    $\{a,e\} \longrightarrow \{h\}$ 
+\end{center}
+
+Első, amit érdemes észrevenni, hogy az $\{a,d\}$ kulcson kívül a szuperkulcsok halmaza tartalmaz még egy elemet, az $\{a,f\}$-et is, de mi választhatjuk ki, hogy melyiket szeretnénk kulcsnak venni, így vegyük az $\{a,d\}$-t.
+A közvetlen megadott függőségekből látható, hogy a $\{d\} \longrightarrow \{b,c,g\} $ sérti a \nfk-t, mivel $\{d\} \longrightarrow \{b,c,f,g\}$ és $\{b,c\} \longrightarrow \{g\}$. De teljesül a $\{d\} \longrightarrow \{f\} \longrightarrow \{d,e\}$ függőség is, így $d^+ = \{ b,c,d,e,f,g\}$ kell venni, és a reláció modell a 
+\begin{center}
+    $R_1 = \{ b,c,\underline{d},e,f,g \}$ \break
+    $R_2 = \{ \underline{a},\underline{d},h \}$
+\end{center}
+alakban már teljesíti a \nfk-t.
+\nfh alakra könnyen hozható, mivel közvetlenül a $\{b,c\} \longrightarrow \{g\}$ függés sérti, így 
+\begin{center}
+    $R_1 = \{ \underline{d},e,f \}$ \break
+    $R_2 = \{ \underline{b}, \underline{c},g \}$ \break
+    $R_3 = \{ \underline{a},\underline{d},h \}$ \break
+\end{center}
+alakban teljesíti is, illetve mivel minden nemtriviális leképezés bal oldala szuperkulcs, így a \BCNF-nek is megfelel. 
+\end{pld}
+
+A példában látott feladattípus esetén a lényeges újdonság, hogy nem közvetlen függőségeket kell csak figyelni, hanem a részkulcs zárt halmazát is vizsgálni kell és ez alapján létrehozni az új relációsémát. 
+
+\subsection{Generáló algoritmus}
+Az zárt feladat esetén a következő szabályokat tartjuk be:
+\begin{itemize}
+    \item $7-8$ attribútuma legyen a relációnak,
+    \item $2$ darab kulcs legyen, $3$ elsődleges attribútummal, 
+    \item Emiatt a kulcsok halmaza különbözik az elsődleges attribútumok halmazával,
+    \item $4$ függésből álljon: négy részleges függésből,
+    \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \in (K \backslash \text{elsődleges attribútum}) \cup (\text{ másodlagos attribútum}   \big\}$ 
+    \item $1.$ függés: $\big \{ |K|-1 \text{ db elem} \big\} \longrightarrow \big\{ 3 \text{ és } 4 \text{ közötti elem} \big \}$
+    \item $2.$ függés: $\big\{ K \backslash \text{elsődleges attribútum} \big\} \longrightarrow \big\{ 1.Fg \rightarrow Bo \cup \{ a_i \in A \big| a_i \not \in 1.Fg \rightarrow Jo  \big\}$ 
+    \item $2.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{ 2 \text{ db elem} \big \}$
+    \item $3.$ függés: $\big\{  1.Fg \rightarrow Jo \backslash \text{elsődleges attribútum} \big\} \longrightarrow \big\{ 1.Fg \rightarrow Jo \backslash (\text{elsődleges attribútum} \cup 3.Fg \rightarrow Bo  \big \}$
+    \item $3.$ függés: $\big \{ 1 \text{ és } 2 \text{ közötti elem} \big\} \longrightarrow \big\{1 \text{ db elem} \big \}$
+    \item $4.$ függés: $\big\{ K \backslash 1.Fg \rightarrow Bo \big\} \longrightarrow \big\{ A \backslash (K \cup 1.Fg \rightarrow Jo \cup 2.Fg \rightarrow Jo  \big \}$
+    \item $4.$ függés: $\big \{ 2 \text{ db elem} \big\} \longrightarrow \big\{1 \text{ db elem} \big \}$
+\end{itemize}
+
+\section{Összegzés}
+
+Jól látni, hogy relációs modell és relációs modell közt hatalmas különbség lehet összetettség szempontjából. Lehetne még bemutatni néhány speciális esetet, viszont ez a négy típusú feladat begyakorlása már elég tudást adhat egy most tanuló diáknak a definíciók és megoldások megismerésére és használatára. 

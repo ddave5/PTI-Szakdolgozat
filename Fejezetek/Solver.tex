@@ -1,0 +1,292 @@
+\chapter{A feladatok megoldása}
+
+\section{Az általános megoldás problémái}
+
+A generált feladatoknál látható, hogy nehéz mondani egy nagy, egységes megoldási módot. Pontosabban \nfh-re és \BCNF-re még lehet is megadni egy algoritmust. \textbf{3NF} esetén: \par
+Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{1NF}-et, illetve legyen $F$ egy $R(A)$-hoz tartozó függéshalmaz.
+\hfill \break
+\begin{algorithmic}
+    \Function{NF3}{$R$}
+        \State $R2nf \gets NF2(R)$
+        \State $R3nf \gets []$
+        \ForAll{$relaciosema(A) \in R2nf$} 
+            \ForAll{$ U \rightarrow V, X \rightarrow Y \in F_{relaciosema}$}
+                \If{$ U \in Key_{relaciosema} \text{ és }  X,Y \in V$}
+                    \State $R3nf \gets R(X\cup Y)$
+                    \State $relaciosema(A) \gets relaciosema(A \backslash ((X\cup Y) \backslash Key_{relaciosema}))$ 
+                    \State Remove useless dependencies from $R(X \cup Y)$
+                \EndIf
+            \EndFor
+            \State Remove useless dependencies from $relaciosema(A)$
+            \State $R3nf \gets relaciosema(A)$
+        \EndFor
+    \EndFunction
+\end{algorithmic}
+\hfill \break
+Az algoritmus egyszerűen végignézi a relációséma függéseit és ahol talál tranzitív függést, ott létrehoz egy új relációsémát, illetve módosítja az eredetit. Ennek a pszeudokódnak a logikai alapjait tanuljuk Adatbázisok gyakorlaton is, mivel egy egyszerű és könnyen átlátható módszer egy adatbázis \nfh-ra hozáshoz. \par
+\textbf{BCNF} esetén sincs nehezebb dolgunk:
+Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{1NF}-et, illetve legyen $F$ egy $R(A)$-hoz tartozó függéshalmaz.
+\hfill \break
+\begin{algorithmic}
+    \Function{BCNF}{$R$}
+        \State $R3nf \gets NF3(R)$
+        \State $BCNF \gets []$
+        \ForAll{$relaciosema(A) \in R3nf$} 
+            \ForAll{$ X \rightarrow Y \in F_{relaciosema}$}
+                \If{$ X \subsetneq Key_{relaciosema}$}
+                    \State $BCNF \gets R(X\cup Y)$
+                    \State $relaciosema(A) \gets relaciosema(A \backslash ((X\cup Y) \backslash Key_{relaciosema}))$ 
+                    \State Remove useless dependencies from $R(X \cup Y)$
+                \EndIf
+            \EndFor
+            \State Remove useless dependencies from $relaciosema(A)$
+            \State $BCNF \gets relaciosema(A)$
+        \EndFor
+    \EndFunction
+\end{algorithmic}
+\hfill \break
+Ez a pszeudokód pedig végignézi az összes relációsémához tartozó függések bal oldalát, és ha az nem szuperkulcs, akkor felbontja az által és így hoz létre egy új relációsémát. \par
+A gond leginkább a \nfk-nál fog történni. Az egyszerű feladat esetén meg kell keresni egyszer a részkulcs közvetlen függéseit, dupla esetén többször is ellenőrizni kell, zártság esetén pedig nem elég a közvetlen függéseket ellenőrizni, hanem teljesen a részkulcs zárt részhalmazát kell venni. Emiatt érdemes egy olyan függvényt létrehozni, amely átlalánosságban készíti el a relációs modell \textbf{2NF} alakját. Viszont az alábbi tétel segíthet nekünk ebben
+
+\begin{tet}
+Legyen $R$ egy \textbf{1NF}-ben lévő relációséma, $F$ a sémához tartozó függéshalmaz és $F_p$ pedig a részleges függéseinek halmaza. Ekkor
+\begin{itemize}
+    \item Ha $F_p = \emptyset$, akkor $R$ \nfk-ben van.
+    \item Ha $F_p \not = \emptyset$, akkor $R$ nincs \nfk-ben.
+\end{itemize}
+\end{tet}
+
+Így ez lesz az irány, amely alapján fogjuk megcsinálni a \nfk-t.
+
+\section{\nfk-re hozó algoritmus}
+
+Hogy általánosságban működhessen az algoritmus, elsőnek a felesleges változókat és függéseket szüntessük meg. Ehhez az alábbi függvényeket használjuk:
+\hfill \break
+\begin{algorithmic}
+    \Function{createAttributePlus}{$R$, $attributumhalmaz$}
+        \State $closed \gets attributumhalmaz$
+        \While{ $X \rightarrow Y \in F$ exists}
+            \If{$X \subseteq closed \text{ és } Y \not \subset closed$}
+                \State $closed \gets closed \cup Y$
+            \EndIf
+        \EndWhile
+        \State \textbf{return} $closed$;
+    \EndFunction
+    \hfill \break
+    
+    \Function{generateRSandLSandLR}{$R$}
+    \State $RS \gets []$
+    \State $LS \gets []$
+    \State $LR \gets []$
+    \ForAll{ $X \rightarrow Y \in F$}
+        \State $LS \gets X$
+        \State $LR \gets Y$
+        \ForAll{$a_i \in A$}
+            \If{$a_i \in LS \text{ és } a_i \in RS$}
+                \State $LS \gets LS \backslash a_i$
+                \State $LR \gets LR \backslash a_i$
+                \State $LR \gets a_i$
+            \EndIf
+        \EndFor
+    \EndFor
+    \State $unique(LS),unique(RS),unique(LR)$
+    \State \textbf{return} $(RS,LS,LR)$
+    \EndFunction
+    \hfill \break
+    
+    \Function{removeExtraneousAttributes}{$R$}
+    \State $G \gets F$
+    \ForAll{$X \rightarrow Y \in G$}
+        \If{ $|X| \geq 1$}
+            \State $Z \gets X$
+            \ForAll{$z \in Z$}
+                \If{$z \in LR$}
+                    \State $H \gets G - (X \rightarrow Y) \cup \{ (Z \backslash z) \rightarrow Y) \}$
+                    \If{ $z \in (Z \backslash z)^+_H$}
+                        \State $Z \gets Z \backslash z$
+                    \EndIf
+                \EndIf
+            \EndFor
+            \If{$X \not = Z$}
+                \State $G \gets H$
+            \EndIf
+        \EndIf
+    \EndFor
+    \State Remove all duplicated dependencies in G.
+    \State \textbf{return} $G$
+    \EndFunction
+    \hfill \break
+    
+    \Function{removeRedundantDependencies}{$R$}
+    \State $F_m \gets removeExtraneousAttributes(R)$
+    \ForAll{ $X \rightarrow Y \in F_m$}
+        \While{ $Z \rightarrow Y \in F_m$ exists}
+            \State $G \gets F_m \backslash (Z \rightarrow Y)$
+            \If {$X \subseteq Y_G^+$}
+                \State $F_m \gets G$
+            \EndIf
+        \EndWhile
+    \EndFor
+    \State \textbf{return} $F_m$
+    \EndFunction
+    \hfill \break
+    
+    \Function{createFullandPartialDependencies}{$R$}
+    \State $F_p = []$
+    \State $F_f = removeRedundantDependencies(R)$
+    \ForAll{$X \rightarrow Y \in F_f$}
+        \If{$X \subseteq \{\text{lehetséges kulcsok halmazai}\} \text{ és } Y \not \in K$}
+            \State $F_p \gets F_p \cup \{ X \rightarrow Y \}$
+            \State $F_f \gets F_f \backslash \{X \rightarrow Y\}$
+        \EndIf
+        \While{$U \rightarrow V \in F_f \text{ és } U \in Y^+$}
+            \State $F_p \gets F_p \cup \{U \rightarrow V\}$
+            \State $F_f \gets F_f \backslash \{U \rightarrow V\}$
+        \EndWhile
+    \EndFor
+    \State \textbf{return} ($F_p$,$F_f$) 
+    \EndFunction
+    \hfill \break
+\end{algorithmic}
+
+Elég sok algoritmus, de ezek segítségével meg tudjuk határozni a relációséma teljes és részleges függéseit. Ezután már csak az következik, hogy \nfk-re tudjunk hozni. Előtte egy példán keresztül nézzük meg, hogy mi is történik a függvények által.
+
+\begin{pld}
+Legyen $R(\underline{a},\underline{b},c,d,e,f,g,h,i)$ relációséma és vegyük az alábbi függéshalmazt:
+\begin{center}
+    $\{b,d\} \longrightarrow \{f\}$, 
+    $\{b\} \longrightarrow \{d\}$, 
+    $\{a,b,d\} \longrightarrow \{f\}$, 
+    $\{f\} \longrightarrow \{d\}$, \break
+    $\{b,d\} \longrightarrow \{h\}$ ,
+    $\{b\} \longrightarrow \{e\}$, 
+    $\{a,b,d\} \longrightarrow \{c\}$ ,
+    $\{b,d\} \longrightarrow \{g\}$, \break
+    $\{b\} \longrightarrow \{i\}$ ,
+    $\{b,d\} \longrightarrow \{i\}$.\break
+\end{center}
+
+A createAttributePlus algoritmusát a \ref{closedAttribute} tételben található. Az $(RS,LS,LR)$ hármas az elemek vizsgálatából adódik és a példában az alábbi halmazok jönnek így létre:
+
+\begin{center}
+    $RS: \{c,e,g,h,i\}$ \break
+    $LS: \{a,b\}$\break
+    $LR: \{d,f\}$
+\end{center}
+
+Ebben a példában is látható, hogy a kulcs megegyezik az $LS$ halmazzal.\par
+A következő folyamat a removeExtraneousAttributes, amely eltávolítja a függésekből az implied extraneous attribútumokat. A függvény futtatása után az alábbi függéshalmazt kapjuk vissza:
+
+\begin{center}
+    $\{b\} \longrightarrow \{d\}$, 
+    $\{f\} \longrightarrow \{d\}$, 
+    $\{b\} \longrightarrow \{e\}$, 
+    $\{b\} \longrightarrow \{i\}$,\break 
+    $\{b\} \longrightarrow \{f\}$, 
+    $\{a,b\} \longrightarrow \{f\}$, 
+    $\{b\} \longrightarrow \{h\}$, 
+    $\{a,b\} \longrightarrow \{c\}$, 
+    $\{b\} \longrightarrow \{g\}$.
+\end{center}
+
+Vegyük például a $\{b,d\} \longrightarrow \{f\}$-et. Ebben a függésben a $d$ implied extraneous attribútum, mivel $\{b\} \longrightarrow \{d\}$ is teljesül. Emiatt $f$ meghatározásához nincs szükség a $d$ attribútumra, így elhagyható a függésből. \par
+
+Ezután legyen a removeRedundantDependencies, amely azokat a függéseket távolítja el, amelyek nem relevánsak a halmazban. Ebben a példában ezek a következők:
+
+\begin{center}
+    $\{f\} \longrightarrow \{d\}$, 
+    $\{b\} \longrightarrow \{e\}$, 
+    $\{b\} \longrightarrow \{i\}$,
+    $\{b\} \longrightarrow \{f\}$, \break 
+    $\{b\} \longrightarrow \{h\}$, 
+    $\{a,b\} \longrightarrow \{c\}$, 
+    $\{b\} \longrightarrow \{g\}$.
+\end{center}
+
+Láthatjuk, hogy például a $\{b\} \longrightarrow \{d\}$ függés eltűnt, mivel a  $\{b\} \longrightarrow \{f\}$ és $\{f\} \longrightarrow \{d\}$ is fennáll. Így az első függés elhagyható, mivel már a $\{b\}^+ \subseteq {f}^+$, így törlődik. 
+
+Végül pedig válasszuk szét a createFullandPartialDependencies függvény segítségével a függéseinket. Ez alapján a két halmaz:
+
+\begin{center}
+    $F_p = \{ \{f\} \longrightarrow \{d\}, 
+    \{b\} \longrightarrow \{e\}, 
+    \{b\} \longrightarrow \{i\},
+    \{b\} \longrightarrow \{f\}, \break
+    \{b\} \longrightarrow \{h\}, 
+    \{a,b\} \longrightarrow \{c\}, 
+    \{b\} \longrightarrow \{g\} \}$ \break
+    $F_f = \{\{a,b\} \longrightarrow \{c\} \}$
+\end{center}
+
+Ezek azok alapján lett szétosztva, hogy
+\begin{enumerate}
+    \item A kezdőfüggés $\{ \text{elsődleges attribútum} \} \longrightarrow \{ \text{nem kulcs}\}$-e,
+    \item A többi függés bal oldala visszavezethető-e a kezdőfüggés jobb oldalából.
+\end{enumerate}
+
+Így látható is, hogy míg például a $\{b\} \longrightarrow \{e\}$ az $1.$ állítás, addig az $\{f\} \longrightarrow \{d\}$ a $2.$ állítás miatt került az $F_p$-be. Ami még észrevehető, hogy az $F_f$ halmazban lévő függések bal oldalai mindig a teljes kulcsot tartalmazzák.
+\end{pld}
+
+Mostmár minden készenáll a \textbf{2NF} bemutatásához:
+
+\begin{algorithmic}
+    \Function{2NF}{$R$}
+        \State $R2nf \gets []$
+        \State $G \gets createFullandPartialDependencies(R)[0]$
+        \If{$G == \emptyset$}
+            \State \textbf{return} $[R]$
+        \EndIf
+        \If{$createFullandPartialDependencies(R)[1] \not = \emptyset$}
+            \State $X_f \gets createFullandPartialDependencies(R)[1] elements$
+        \Else
+            \State $X_f \gets A$
+        \EndIf
+        \ForAll{$X \longrightarrow Y \in G$}
+            \If{$X \in K \text{ és } G \not = \emptyset$}
+                \State $R(X^+_G).keys \gets X$
+                \State $X_f \gets X_f \backslash \{x_i \in X_f \big | x_i \not \in K \text{ és } x_i \in Y_G^+ \}$
+                \State $G \gets G \backslash \{ U \rightarrow V \in G \big | U \in Y_G^+ \}$
+                \State $R2nf \gets R(X^+_G)$
+            \EndIf
+        \EndFor
+        \State $R2nf \gets R2nf \cup R(X_f)$
+        \State $R(X_f).keys \gets X_f$
+        \State \textbf{return} $R2nf$
+    \EndFunction
+\end{algorithmic}
+
+A cikkhez képest itt viszont egy kisebb eltérés található, az az $X_f$ meghatározása. Mivel a négy típusfeladatból három esetben nincs teljes függés, emiatt az $X_f$-be ebben az esetben a teljes attribútumlistát kell elhelyezni. Ez azért fog kelleni, mert ha az $X_f$ nem tartalmaz elemet, abban az esetben minden új reláció üres halmazzal lenne megvalósítva. \par
+
+A cikkben található \textbf{3NF} azért nem lett végül kidolgozva, mivel az algoritmus egyes feladattípusokon nem működőképes. Vegyünk egy példát a zárt feladat típus esetén:
+
+\begin{pld}
+Legyen $R(a,b,c,d,e,f,g,h)$ és legyen $F$ az alábbi függéshalmaz:
+\begin{center}
+    $\{f\} \longrightarrow \{b,d,e,h\},$\break
+    $\{b\} \longrightarrow \{f,g\},$\break
+    $\{e,h\} \longrightarrow \{d\},$\break
+    $\{c,d\} \longrightarrow \{a\}$
+\end{center}
+Ennek a \textbf{2NF} alakja a következő:
+\begin{center}
+    $R1(b,d,e,f,g,h)$ \break
+    $R2(a,c,f)$
+\end{center}
+És a cikkben található algoritmus alapján az alábbi relációmodell lenne a \textbf{3NF}:
+\begin{center}
+    $R1(a,b,d,e,h)$ \break
+    $R2(b,f,g)$ \break
+    $R3(e,h,d)$ \break
+    $R4(c,d,a)$
+\end{center}
+Viszont elég lenne az $\{e,h\} \longrightarrow \{d\}$ mentén bontani, ami meg is határozza számunkra a \nfh-et:
+\begin{center}
+    $R1(b,e,f,g,h)$ \break
+    $R2(d,e,h)$
+    $R3(a,c,f)$
+\end{center}
+\end{pld}
+
+\section{Összegzés}
+
+Ebben a fejezetben láthatjuk, hogy hogyan lehet általánosságban egy relációs sémát a megfelelő alakra hozni, így ezeket egy függvényhívás segítségével megvalósítani. Látható, hogy a \textbf{2NF} meghatározás nem a mindig a legegyszerűbb meghatározni, és látható, hogy milyen folyamatok történnek egy \nfk-re hozásig. Innentől már csak implementálni kell a moodle-be ezeket a folyamatokat. 
