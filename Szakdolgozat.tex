@@ -62,25 +62,32 @@
 \usepackage{listings,xcolor}
 \usepackage{inconsolata}
 
-\definecolor{dkgreen}{rgb}{0,.6,0}
-\definecolor{dkblue}{rgb}{0,0,.6}
-\definecolor{dkyellow}{cmyk}{0,0,.8,.3}
-\definecolor{dkorange}{rgb}{1,0.5,0}
+\definecolor{mygreen}{HTML}{03AC13}
+\definecolor{myblue}{HTML}{1338BE}
+\definecolor{myyellow}{HTML}{FFD300}
+\definecolor{myorange}{HTML}{FF8040}
+\definecolor{myred}{HTML}{8D021F}
+\definecolor{mypurple}{HTML}{9867C5}
 
 \lstset{
   language        = php,
   basicstyle      = \small\ttfamily,
-  keywordstyle    = \color{dkblue},
-  stringstyle     = \color{red},
-  identifierstyle = \color{dkgreen},
+  keywordstyle    = \color{mypurple},
+  stringstyle     = \color{myred},
+  numbers         = left,
+  numberstyle     = \color{myblue},
+  identifierstyle = \color{mygreen},
   commentstyle    = \color{gray},
   emph            =[1]{php},
   emphstyle       =[1]\color{black},
   emph            =[2]{if,and,or,else},
-  emphstyle       =[2]\color{dkyellow},
+  emphstyle       =[2]\color{myyellow},
   emph            =[3]{function},
-  emphstyle       =[3]\color{dkorange}
+  emphstyle       =[3]\color{myorange},
+  emph            =[4]{require_once},
+  emphstyle       =[4]\color{mypurple}
 }
+
 
 
 \graphicspath{ {./Fejezetek/Images/} }

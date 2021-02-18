@@ -85,9 +85,9 @@ A Moodle korábban létrejött, mint azok a modern PHP keretrendszerek, amelyek 
 \end{center}
 
 Ezen keresztül lehet látni, hogy az $id$ adattag megkapja a $42$ értéket, a könyvtárak ezen keresztül lefuttatják a megfelelő függvényeket és a választ a request handleren keresztül közlik a felhasználóval. Hogy el tudjuk érni a request handler-t szükséges elsőnek betölteni a főmappában lévő config.php fájl-t, amely az alábbi parancs segítségével történik: \par
-\hfill \break
-require(\_\_DIR\_\_. '/../../config.php');
-\hfill \break
+\begin{itemize}
+    \item[] require(\_\_DIR\_\_. '/../../config.php');
+\end{itemize}
 
 Ez a fájl tartalmazza az adatbázis, session-ök, jelenlegi kurzusok, témák és nyelvek inicializálását és ezekhez kapcsolódó adattagokat, funkciókat. Pontosítva, a config.php-n keresztül történik a többi főbb php file meghívásra, melyeken keresztül tudjuk a Moodle főbb részeit elérni. \par
 
@@ -105,9 +105,9 @@ Ezenkívül biztonsági okokból a fejlesztő nem tudja elérni a \$\_GET,  \$\_
 Az összes ilyen típust a lib/moodlelib.php-ben lehet megtalálni és ott vannak a megfelelő tisztító és vezérlőkódok is leprogramozva.
 
 A másik fontos része a pluginünknek, hogy azt a böngésző címsorából közvetlenül ne tudjuk elérni vagy módosítani, hanem csak a könyvtárakon keresztül tudjuk betölteni, ehhez az alábbi sornak kell a kódban lennie: \par
-\hfill \break
-defined('MOODLE\_INTERNAL') || die();
-\hfill \break
+\begin{itemize}
+    \item[] defined('MOODLE\_INTERNAL') || die();
+\end{itemize}
 
 Ennek segítségével tudjuk megcsinálni, hogy vagy csak a Moodle könyvtár segítségével történjen a betöltés, ha pedig nem sikerült úgy, abban az esetben egy fehér képernyő látszódjon és a console-ból se lehessen kiolvasni semmilyen forráskódot. \par
 Minden egyéb betöltést pedig a /classes mappából történik. 
@@ -116,45 +116,46 @@ Minden egyéb betöltést pedig a /classes mappából történik.
 
 Minden Plugin kezdőfelülete az index.php. Ebben hozzuk létre a változóinkat, adunk nekik értéket, jelenítjük meg a plugin tartalmát, és itt állítunk be témát. Minden pluginhez tartozik egy \$PAGE globális változó, amelyen keresztül készítjük el és szabjuk testre a plugint. Egy \$PAGE esetén sok tulajdonságot lehet beállítani, viszont első körben nézzük meg a legfontosabbakat. \par
 Elsőnek állítsuk be a \$PAGE URL címét: 
-\hfill \break
-\$PAGE->set\_url(new moodle\_url('/plugintípus/pluginnév/index.php));
-\hfill \break
+\begin{itemize}
+    \item[] \$PAGE->set\_url(new moodle\_url('/plugintípus/pluginnév/index.php));
+\end{itemize}
 
 Ezzel a függvényhívással már tudunk hivatkozni a jelenlegi címre, illetve a plugin indításakor a Moodle tudni fogja, hogy melyik címet kell megnyitnia. Később is hasznos lehet nekünk ez, mivel például ha szeretnénk egy form-ot létrehozni, akkor a fejléc lehet az alábbi:
-\hfill \break
-echo '<form method="get" action="'.\$PAGE->url.'">';
-\hfill \break
+\begin{itemize}
+    \item[] echo '<form method="get" action="'.\$PAGE->url.'">';
+\end{itemize}
 
 A másik nagyon fontos, hogy megadjuk, hogy a \$PAGE mihez tartozik, a Moodle mely részével van összekötve, összekapcsolva. Itt értem ez alatt, hogy plugin egy modulhoz, egy kurzushoz vagy magához a rendszerhez van készítve, azon részeivel van kapcsolatban. Ezt a következő módon tudjuk megvalósítani:
 
-\hfill \break
-\$PAGE->set\_context(context\_system::instance());
-\hfill \break
+\begin{itemize}
+    \item[] \$PAGE->set\_context(context\_system::instance());
+\end{itemize}
 
 Ebben az esetben egy rendszerszintű plugint fogunk érteni. Ha kurzushoz akarjuk, akkor paraméternek a contect\_course::instance(\$kurzusid)-t, ha pedig egy modulhoz, akkor a contect\_module::instance(\$moduleid)-t kell megadni. \par
 
 Ezeket kötelező beállítani minden \$PAGE esetén, de vannak még olyan tulajdonságok, amelyek fontosak. A
-\hfill \break
-\$PAGE->set\_title(get\_string('pluginname', 'plugintípus\_pluginnév'));
-\hfill \break
-segítségével a böngésző tetején a füleknek a nevét lehet beállítani, itt is a lang/en/plugintípus\_pluginnév-ből veszi ki a pluginname kulcsú értéket és azt állítja be, a 
-\hfill \break
-\$PAGE->set\_heading(get\_string('heading', 'plugintípus\_pluginnév'));
-\hfill \break
+\begin{itemize}
+    \item[] \$PAGE->set\_title(get\_string('pluginname', 'plugintípus\_pluginnév'));
+\end{itemize}
+
+segítségével a böngésző tetején a füleknek a nevét lehet beállítani, itt is a \break lang/en/plugintípus\_pluginnév-ből veszi ki a pluginname kulcsú értéket és azt állítja be, a 
+\begin{itemize}
+    \item[] \$PAGE->set\_heading(get\_string('heading', 'plugintípus\_pluginnév'));
+\end{itemize}
 segítségével tudunk címet adni a pluginnak, ez is ugyannazzal a módszerrel történik, mint a title esetén, végül pedig a
-\hfill \break
-\$PAGE->set\_pagelayout('standard');
-\hfill \break
+\begin{itemize}
+    \item[] \$PAGE->set\_pagelayout('standard');
+\end{itemize}
 függvényhívás segítségével tudjuk kiválasztani, hogy mely beépített alapkinézetet szeretnénk választani. Nagy többségében a 'standard' kinézetet választják, de ebből is többféle létezik: 'base','course','admin','login',stb. \par
 
 Ha pedig mindent sikerült beállítani, akkor ezeket már csak ki kell írni a képernyőre. Ebben segít a \$OUTPUT változó, amely a renderelésért felel, ezen változó függvényeinek meghívásával történnek meg a kiíratások, megjelenítések. Például eddig bemutatott \$PAGE adattagok értékeit beállítottuk, ennek megjelenítésére a 
-\hfill \break
-echo \$OUTPUT->header();
-\hfill \break
+\begin{itemize}
+    \item[] echo \$OUTPUT->header();
+\end{itemize}
 meghívásával tudjuk megjeleníteni. A lábléc-et az
-\hfill \break
-echo \$OUTPUT->footer();
-\hfill \break
+\begin{itemize}
+    \item[] echo \$OUTPUT->footer();
+\end{itemize}
 parancs szükséges, viszont a index.php "törzséhez" nem kell külön az \$OUTPUT változó egy függvényét meghívni, elég ha megfelelő echo és html tagek közt megadjuk. Viszont célszerű speciális esetekben a Moodle által létrehozott kiírató függvényeket használni. Ezeket az eseteket a következő ábra bemutatja:
 
 \begin{center}
@@ -162,9 +163,9 @@ parancs szükséges, viszont a index.php "törzséhez" nem kell külön az \$OUT
 \end{center}
 
 Ezenkívül lehetőségünk van különböző HTML megjelenítést és logikai elkülönítést segítő függvényeket is meghívni, ezt a html\_writer osztály-ban lévő függvények segítségével tudjuk megtenni. Például
-\hfill \break
-echo html\_writer::tag('input','nev',[ 'type' => 'text', 'name' => 'username']); 
-\hfill \break
+\begin{itemize}
+    \item[] echo html\_writer::tag('input','nev',[ 'type' => 'text', 'name' => 'username']); 
+\end{itemize}
 kiíratás segítségével egy új input taget tudubk létrehozni, amely szöveget vár, username néven tárolja el és a kezdőértéke a nev szöveg. Ilyen függvényekből is több fajta létezik: link(), img(), table(), stb.
 
 \subsection{Egyéb beállítások}
@@ -172,7 +173,7 @@ kiíratás segítségével egy új input taget tudubk létrehozni, amely szöveg
 A Moodle-ben van lehetőségünk még rengeteg dologra egy plugin készítésével kapcsolatban. Lehet
 \begin{itemize}
     \item Fő menüsorra elhelyezni, vagy almenüsorra beszúrni,
-    \item Admin felhasználói beállításokat lehet adni, amelyek segítségével irányítható a plugin,
+    \item Admin felhasználói beállításokat lehet adni, amelyek segítségével testreszabható a plugin,
     \item Verziókövetés, 
     \item Adatbázist lehet hozzákapcsolni és abból SQL lekérdezések segítségével lehet az adatokat kinyerni,
     \item stb.
@@ -189,13 +190,13 @@ A menübár egy fa struktúrával felépített UI amelynek 3 részét különbö
 
 Ha szeretnénk az oldalhoz menüsort beállítani, azt a \$PAGE->navigation->add() függvény meghívásával tudjuk megtenni, amelybe egy linket kell belemásolni, illetve ha szeretnénk saját menübárt, akkor azt a lib.php fájlban kell függvények formájában implementálni. Ha pedig szeretnénk a főoldalon található navigation bar-ba elhelyezni, akkor az alábbi kódot kell a lib.php-ban elhelyezni: 
 
-\begin{lstlisting}
+\begin{lstlisting}[language=PHP]
 /**
  * Add link to index.php into navigation drawer.
  *      
  * @param global_navigation $root Node representing the global navigation tree.
  */
-function /plugintipus_pluginnev_extend_navigation(global_navigation $root) {
+function plugintipus_pluginnev_extend_navigation(global_navigation $root) {
 
     $node = navigation_node::create(
         get_string('sayhello', 'plugintipus_pluginnev'), 
