@@ -50,8 +50,33 @@ $PAGE->set_heading(get_string('heading', 'local_szakdolgozat'));
 $PAGE->set_pagelayout('standard');
 
 echo $OUTPUT->header();
+?>
 \end{lstlisting}
 
 A nehézség kiválasztása egy egyszerű nyomógombos megoldás, kezdeti értéknek az egyszerű megadva. Amelyiket kiválasztja a felhasználó, arról fog kapni egy feladatot. A nehézség mentése az urlben történik és egy \$difficulty változóval történik a kiolvasása. \par
 
-A Feladat generálása előtt egy felirat található, ahol egy leírás található, hogy milyen formában kell beküldeni a megoldást. Ez azért fontos, hogyha egy megoldást és egy felhasználói választ akarunk összeegyeztetni, akkor elsőnek érdemes átalakítani egy felhasználói választ egy Relációséma példánnyá, így könnyebben tudjuk kezelni. A feladat generálás után pedig 
+A Feladat generálása előtt egy felirat található, ahol egy leírás található, hogy milyen formában kell beküldeni a megoldást. Ez azért fontos, hogyha egy megoldást és egy felhasználói választ akarunk összeegyeztetni, akkor elsőnek érdemes átalakítani egy felhasználói választ egy Relációséma példánnyá, így könnyebben tudjuk kezelni. A feladat generálás után pedig elmentjük, illetve bekérjük a felhasználótól az általa gondolt jó választ. Ha ez megtörtént, akkor a megadott válaszokat a \textbf{2NF}, \textbf{3NF} és \textbf{BCNF} változókban mentjük és ugrunk a megoldás megmutatására.\par
+
+A legutolsó oldalon pedig a feladaton kívül láthatjuk az általunk megadott választ és a megoldást. Ezután tudunk másik nehézséget választani vagy ebből a nehézségből egy új feladatot kérni. A plugin nem tudja kiértékelni a felhasználó által megadott megoldással, de ez nincs is a feladatkiírásban, így nem probléma. \par
+
+\section{Képernyőképek}
+
+Magyar nyelvű felület:
+
+\begin{center}
+    \includegraphics[scale=0.4]{Fejezetek/Images/magyar01.png}
+    \hfill \break
+    \includegraphics[scale=0.4]{Fejezetek/Images/magyar02.png}
+    \hfill \break
+    \includegraphics[scale=0.4]{Fejezetek/Images/magyar03.png}
+\end{center}
+
+Angol nyelvű felület:
+
+\begin{center}
+    \includegraphics[scale=0.4]{Fejezetek/Images/english01.png}
+    \hfill \break
+    \includegraphics[scale=0.4]{Fejezetek/Images/english02.png}
+    \hfill \break
+    \includegraphics[scale=0.4]{Fejezetek/Images/english03.png}
+\end{center}
