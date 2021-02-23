@@ -11,11 +11,11 @@ Az adatokat szeretnénk értelmezni, könnyen kezelhető formába helyezni akár
 Az \textbf{adatbázis} adott formátum és rendszer szerint tárolt adatok együttesét jelenti. Ennek alapvető adategységét \textbf{sor}nak vagy \textbf{rekord}nak hívjuk. Sor esetén egy teljes adatbázisbeli objektum értékét, míg rekord esetén egy objektum adott tulajdonságát értjük.
 \end{defi}
 
-\begin{defi}[Egyed,tulajdonság,kapcsolat]
+\begin{defi}[Egyed, attribútum, kapcsolat]
 \textbf{Egyednek} nevezzük azt az objektumot, amelyről szeretnénk adatokat tárolni. Ezeknek az egyedeknek egy-egy jellemzőjét \textbf{attribútum}nak hívjuk, illetve az egyedek között \textbf{kapcsolat}ok alakulhatnak ki, melyek meghatározhatják a különböző egyedek egyes tulajdonságait.
 \end{defi}
 
-Az adatokat szeretnénk rendszerezni is az adatbázisban, erre több módszer is szolgál, amelyek évek-évtizedek alatt alakultak ki. Ezen modellek a következők:
+Az adatokat szeretnénk rendszerezni is az adatbázisban, erre több módszer is szolgál, amelyek évek, évtizedek alatt alakultak ki. Ezen modellek a következők:
 \begin{itemize}
     \item Hiearchikus modell
     \item Hálós modell
@@ -23,7 +23,7 @@ Az adatokat szeretnénk rendszerezni is az adatbázisban, erre több módszer is
     \item Objektumorientált modell
     \item Objektum-relációs modell
 \end{itemize}
-A szakdolgozat a relációs modell-lel foglalkozik, amely a mai napig széles körben használt modell.
+A szakdolgozat a relációs modellel foglalkozik, amely a mai napig széles körben használt modell.
 
 \begin{defi}[Relációs adatmodell]
 A \textbf{relációs adatmodell}ben az adatokat és a köztük lévő kapcsolatokat kétdimenziós táblákban tárolja. A táblákban az azonos sorban álló egyedek alkotnak egy relációt. Az erre a modellre épülő adatbáziskezelő-rendszereket RDBMS-nek (Relational Database Management System) nevezzük.
@@ -44,18 +44,18 @@ A \textbf{szuperkulcs} az adattábla azon attribútumainak különleges tulajdon
 \end{defi}
 
 \begin{pld}
-Vegyünk egy hétköznapi példát egy relációs adatbázis-modellre:
-\begin{center}
-    Könyv(\underline{ISBN}, \textit{kiadókód}, író, cím, megjelenés éve) \break
-    Kiadó(\underline{kiadókód}, kiadó neve, város, cím)
-\end{center}
+Vegyünk egy hétköznapi példát egy relációs adatbázis-modellre:\par
+
+    Könyv(\underline{ISBN}, \textit{kiadókód}, író, cím, megjelenés éve)\par
+    Kiadó(\underline{kiadókód}, kiadó neve, város, cím)\par
+
 Ebben a példában az ISBN egy attribútum, az $\{\text{ISBN, kiadókód, író, cím, megjelenés éve} \}$ egy attribútumhalmaz, Könyv a séma neve, $T = dom(\text{ISBN}) \times dom(\text{kiadókód})$ egy Könyv feletti $T$ reláció.
-Szuperkulcs lehet például a $\{$ISBN, kiadókód, író, cím, megjelenés éve $\}$ vagy $\{$ISBN, kiadókód$\}$ vagy $\{$ ISBN $\}$. A kulcsa a Könyv relációsémának az ISBN (ezt mindig aláhúzással jelöljük), a Kiadónak pedig a kiadókód. Illetve a Könyv kiadókód attribútuma lesz egy külső kulcs.
+Szuperkulcs lehet például a $\{$ISBN, kiadókód, író, cím, megjelenés éve $\}$ vagy $\{$ISBN, kiadókód$\}$ vagy $\{$ ISBN $\}$. A Könyv relációséma kulcsa az ISBN (ezt mindig aláhúzással jelöljük), a Kiadónak pedig a kiadókód. Illetve a Könyv kiadókód attribútuma lesz egy külső kulcs.
 \end{pld}
 
 \section{Normálforma}
 
-Ha minden adatot egy relációssémában tárolunk, az idő és tárigényes is lehet, mivel sokkal körülményesebb lehet a módosítás, törlés illetve a beszúrás. Emiatt egy nagyobb Relációsémát érdemesebb több, kisebb relációsémára bontani, amelyek kapcsolatban állnak egymással. Így időt és tárigényt csökkenthetünk, sőt az adattábláink is könnyebben átláthatóvá válnak. Erre szolgál a normalizálás. Viszont mielőtt ezt meg tudjuk tenni, elsőnek vezessünk be néhány alapdefiníciót.
+Ha minden adatot egy relációssémában tárolunk, az idő és tárigényes is lehet, mivel sokkal körülményesebb lehet a módosítás, törlés illetve a beszúrás. Emiatt egy nagyobb relációsémát érdemesebb több, kisebb relációsémára bontani, amelyek kapcsolatban állnak egymással. Így időt és tárigényt csökkenthetünk, sőt az adattábláink is könnyebben átláthatóvá válnak. Erre szolgál a normalizálás. Viszont mielőtt ezt meg tudjuk tenni, elsőnek vezessünk be néhány alapdefiníciót.
 
 \begin{defi} [Funkcionális függőség]
 Legyen $R(A_1,\ldots,A_n)$ egy relációséma és $P,Q \subseteq \{A_1,\ldots,A_n\}$. Azt mondjuk, hogy $P$-től \textbf{funkcionálisan függ} $Q$ $(P \rightarrow Q)$, ha bármely $R$ feletti $T$ tábla esetén valahányszor két sor megegyezik $P$-n, mindannyiszor megegyezik $Q$-n is, azaz 
@@ -80,11 +80,13 @@ Ebben az alábbi függések a nemtriviálisak:
     \item $\{\text{felhasználónév}\}\longrightarrow \{\text{e-mail,jelszó,születési év}\}$
 \end{itemize}
 Továbbá az alábbi függések teljesen nemtriviálisak:
+
 \begin{itemize}
-    \item $\{\text{felhasználónév,e-mail}\}\longrightarrow \{\text{jelszó}\}$
-    \item $\{\text{felhasználónév, születési év}\}\longrightarrow \{\text{e-mail}\}$
-    \item $\{\text{e-mail, jelszó}\}\longrightarrow \{\text{felhasználónév}\}$
+    \item $\{\text{felhasználónév, e-mail}\} \longrightarrow \{\text{jelszó}\}$
+    \item $\{\text{felhasználónév, születési év}\} \longrightarrow \{\text{e-mail}\}$
+    \item $\{\text{e-mail, jelszó}\} \longrightarrow \{\text{felhasználónév}\}$
 \end{itemize}
+
 \end{pld}
 
 \begin{defi}[Attribútumhalmaz lezártja]
@@ -104,9 +106,14 @@ Az alábbi algoritmus megadja egy $X$ attribútumhalmaz lezártját $F$ felett.
 Vegyük az alábbi relációsémát a függőségeivel:
 \begin{center}
     $R(a,b,c,d,e,f,g)$ \break
-    $\{a\} \longrightarrow \{e,f\}$\break
-    $\{f\} \longrightarrow \{g\}$\break
-    $\{b\} \longrightarrow \{d\}$  
+    $$
+    \begin{matrix}
+    \{a\} & \longrightarrow & \{e,f\} \\
+    \{f\} & \longrightarrow & \{g\} \\
+    \{b\} & \longrightarrow & \{d\}
+    \end{matrix}
+    $$
+    
 \end{center}
 Ekkor $\{a,b\}$ lezártja:
 \begin{itemize}
@@ -140,7 +147,7 @@ Egy attribútumot \textbf{elsődleges attribútum}nak nevezünk, ha szerepel a r
 \end{defi}
 
 \begin{defi}[Közvetlen és tranzitív függőség]
-Legyen $X,Z \subseteq A$ úgy, hogy $X \rightarrow Z$. Azt mondjuk, hogy $X \longrightarrow Z$ \textbf{tranzitív függés}, ha létezik olyan $Y \subseteq A$, amelyre $X \longrightarrow Y$ és $Y \longrightarrow Z$ úgy, hogy az $Y \longrightarrow Z$ teljesen nemtriviális és $X$ nem függ $Y$-tól. Ellenkező esetben azt mondjuk, hogy $X \longrightarrow Z$ \textbf{közvetlen függés}.
+Legyen $X,Z \subseteq A$ úgy, hogy $X \longrightarrow Z$. Azt mondjuk, hogy $X \longrightarrow Z$ \textbf{tranzitív függés}, ha létezik olyan $Y \subseteq A$, amelyre $X \longrightarrow Y$ és $Y \longrightarrow Z$ úgy, hogy az $Y \longrightarrow Z$ teljesen nemtriviális és $X$ nem függ $Y$-tól. Ellenkező esetben azt mondjuk, hogy $X \longrightarrow Z$ \textbf{közvetlen függés}.
 \end{defi}
 
 \begin{defi}[Normálformák]
@@ -149,12 +156,12 @@ Egy relációséma normálformái az alábbiak:
     \item Egy relációséma \textbf{1NF}-ben van, ha az attribútumok értéktartománya csak egyszerű adatokból áll.
     \item Egy relációséma \nfk-ben van, ha minden másodlagos attribútum teljesen függ bármely kulcstól.
     \item Egy relációséma \nfh-ben van, ha minden másodlagos attribútum közvetlenül függ bármely kulcstól, azaz nincs kulcstól vett tranzitív függés.
-    \item Egy relációséma \textbf{Boyce-Codd normálformá}-ban van (röviden \BCNF-ben), ha bármely nemtriviális $L \longrightarrow B$ függés esetén $L$ szuperkulcs.
+    \item Egy relációséma \textbf{Boyce-Codd normálformá}ban van (röviden \BCNF-ben), ha bármely nemtriviális $L \longrightarrow B$ függés esetén $L$ szuperkulcs.
 \end{itemize}
 \end{defi}
 
 \begin{megj}
-A szakdolgozat \nfk, \nfh és \BCNF normalizálással foglalkozik, de ezenkívül még létezik \textbf{4NF}, \textbf{ETNF}, \textbf{5NF}, \textbf{DKNF} és \textbf{6NF} normálformák is, viszont ezekre itt nem térek ki.
+A szakdolgozat \textbf{2NF}, \textbf{3NF} és \textbf{BCNF} normalizálással foglalkozik, de ezenkívül még létezik \textbf{4NF}, \textbf{ETNF}, \textbf{5NF}, \textbf{DKNF} és \textbf{6NF} normálformák is, viszont ezekre itt nem térek ki.
 \end{megj}
 
 \begin{tet}[A normálformák közti összefüggés]
@@ -162,22 +169,23 @@ Ha egy relációséma \BCNF-ben van, akkor \nfh-ben is, ha \nfh-ben van, akkor \
 \end{tet}
 
 \begin{pld}
-Vegyük az alábbi relációsémát:
+Vegyük az alábbi relációsémát valamint függőségi halmazt:
 \begin{center}
     Reptér(\underline{név},\underline{város},ország, napi járatszám, főváros)
 \end{center}
-Illetve feleltessünk meg hozzá függőségeket is:
-\begin{center}
-    $\{\text{név,város}\} \longrightarrow \{\text{napi járatszám}\}$ \break
-    $\{\text{város}\} \longrightarrow \{\text{ország, főváros}\}$ \break
-    $\{\text{ország}\} \longrightarrow \{\text{főváros}\}$ 
-\end{center}
-Mivel minden attribútum elemi attribútumokból áll, ezért a relációs modell \textbf{1NF}-ben van. Viszont mivel egy város nevéből meg tudjuk hatázoni, hogy melyik országban van és mi a fővárosa, így nem minden másodlagos attribútum függ bármely kulcstól, tehát a $\{\text{város}\} \rightarrow \{\text{ország, főváros}\}$ függés sérti a \nfk-et. Emiatt ez a függőség alapján szét lehet bontani a relációs modellt az alábbira:
+$$
+    \begin{matrix}
+    \{\text{név,város}\} & \longrightarrow & \{\text{napi járatszám}\} \\
+    \{\text{város}\} & \longrightarrow & \{\text{ország, főváros}\} \\
+   \{\text{ország}\}  & \longrightarrow & \{\text{főváros}\}
+    \end{matrix}
+$$
+Mivel minden attribútum elemi attribútumokból áll, ezért a relációs modell \textbf{1NF}-ben van. Viszont mivel egy város nevéből meg tudjuk hatázoni, hogy melyik országban van és mi a fővárosa, így nem minden másodlagos attribútum függ bármely kulcstól, tehát a $\{\text{város}\} \rightarrow \{\text{ország, főváros}\}$ függés sérti a \nfk-et. Emiatt ez a függőség mentén szét lehet bontani a relációs modellt az alábbira:
 \begin{center}
     Reptér(\underline{név},\underline{város},napi járatszám) \break
     Helyezkedés(\textit{város}, ország, főváros)
 \end{center}
-Ha jobban megfigyeljük, látszik, hogy a városból adódik az ország és a főváros, de az országból meg tudjuk mondani annak fővárosát, így találhatunk ebben a modellben kulcstól vett tranzitív függést. Így a példánk tovább bontani a $\{\text{ország}\} \rightarrow \{\text{főváros}\}$ függés alapján, ami így néz ki:
+Ha jobban megfigyeljük, látszik, hogy a városból adódik az ország és a főváros, de az országból meg tudjuk mondani annak fővárosát, így találhatunk ebben a modellben kulcstól való tranzitív függést. Így a példánk tovább bontani a $\{\text{ország}\} \rightarrow \{\text{főváros}\}$ függés alapján, ami így néz ki:
 \begin{center}
     Reptér(\underline{név},\underline{város},napi járatszám) \break
     Helyezkedés(\textit{város}, \textit{ország})\break

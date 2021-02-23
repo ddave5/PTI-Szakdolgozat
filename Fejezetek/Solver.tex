@@ -8,16 +8,16 @@ Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{
 \begin{algorithmic}
     \Function{NF3}{$R$}
         \State $R2nf \gets NF2(R)$
-        \State $R3nf \gets []$
+        \State $R3nf \gets \emptyset$
         \ForAll{$relaciosema(A) \in R2nf$} 
             \ForAll{$ U \rightarrow V, X \rightarrow Y \in F_{relaciosema}$}
                 \If{$ U \in Key_{relaciosema} \text{ és }  X,Y \in V$}
                     \State $R3nf \gets R(X\cup Y)$
                     \State $relaciosema(A) \gets relaciosema(A \backslash ((X\cup Y) \backslash Key_{relaciosema}))$ 
-                    \State Remove useless dependencies from $R(X \cup Y)$
+                    \State Távolítsuk el a felesleges függéseket a $R(X \cup Y)$-ból
                 \EndIf
             \EndFor
-            \State Remove useless dependencies from $relaciosema(A)$
+            \State Távolítsuk el a felesleges függéseket a $relaciosema(A)$-ból
             \State $R3nf \gets relaciosema(A)$
         \EndFor
     \EndFunction
@@ -30,16 +30,16 @@ Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{
 \begin{algorithmic}
     \Function{BCNF}{$R$}
         \State $R3nf \gets NF3(R)$
-        \State $BCNF \gets []$
+        \State $BCNF \gets \emptyset$
         \ForAll{$relaciosema(A) \in R3nf$} 
             \ForAll{$ X \rightarrow Y \in F_{relaciosema}$}
                 \If{$ X \subsetneq Key_{relaciosema}$}
                     \State $BCNF \gets R(X\cup Y)$
                     \State $relaciosema(A) \gets relaciosema(A \backslash ((X\cup Y) \backslash Key_{relaciosema}))$ 
-                    \State Remove useless dependencies from $R(X \cup Y)$
+                    \State Távolítsuk el a felesleges függéseket a $R(X \cup Y)$-ból
                 \EndIf
             \EndFor
-            \State Remove useless dependencies from $relaciosema(A)$
+            \State Távolítsuk el a felesleges függéseket a $relaciosema(A)$-ból
             \State $BCNF \gets relaciosema(A)$
         \EndFor
     \EndFunction
@@ -63,21 +63,21 @@ Legyen $R$ egy \textbf{1NF}-ben lévő relációséma, $F$ a sémához tartozó 
 Hogy általánosságban működhessen az algoritmus, elsőnek a felesleges változókat és függéseket szüntessük meg. Ehhez az alábbi függvényeket használjuk:
 \hfill \break
 \begin{algorithmic}
-    \Function{createAttributePlus}{$R$, $attributumhalmaz$}
-        \State $closed \gets attributumhalmaz$
+    \Function{zárt\_halmaz\_készitő}{$R$, $attributumhalmaz$}
+        \State $zarthalmaz \gets attributumhalmaz$
         \While{ $X \rightarrow Y \in F$ exists}
-            \If{$X \subseteq closed \text{ és } Y \not \subset closed$}
-                \State $closed \gets closed \cup Y$
+            \If{$X \subseteq zarthalmaz \text{ és } Y \not \subset zarthalmaz$}
+                \State $zarthalmaz \gets zarthalmaz \cup Y$
             \EndIf
         \EndWhile
         \State \textbf{return} $closed$;
     \EndFunction
     \hfill \break
     
-    \Function{generateRSandLSandLR}{$R$}
-    \State $RS \gets []$
-    \State $LS \gets []$
-    \State $LR \gets []$
+    \Function{RS\_LS\_LR\_készítő}{$R$}
+    \State $RS \gets \emptyset$
+    \State $LS \gets \emptyset$
+    \State $LR \gets \emptyset$
     \ForAll{ $X \rightarrow Y \in F$}
         \State $LS \gets X$
         \State $LR \gets Y$
@@ -89,12 +89,12 @@ Hogy általánosságban működhessen az algoritmus, elsőnek a felesleges vált
             \EndIf
         \EndFor
     \EndFor
-    \State $unique(LS),unique(RS),unique(LR)$
+    \State Távolítsuk el $LS$, $RS$ és $LR$ ismétlődő elemeit. 
     \State \textbf{return} $(RS,LS,LR)$
     \EndFunction
     \hfill \break
     
-    \Function{removeExtraneousAttributes}{$R$}
+    \Function{extraneous\_attribútum\_eltávolító}{$R$}
     \State $G \gets F$
     \ForAll{$X \rightarrow Y \in G$}
         \If{ $|X| \geq 1$}
@@ -112,13 +112,13 @@ Hogy általánosságban működhessen az algoritmus, elsőnek a felesleges vált
             \EndIf
         \EndIf
     \EndFor
-    \State Remove all duplicated dependencies in G.
+    \State Távolítsuk el az összes ismétlődő függést $G$-ből.
     \State \textbf{return} $G$
     \EndFunction
     \hfill \break
     
-    \Function{removeRedundantDependencies}{$R$}
-    \State $F_m \gets removeExtraneousAttributes(R)$
+    \Function{nélkülözhető\_függés\_eltávolító}{$R$}
+    \State $F_m \gets extraneous\_attributum\_eltavolito(R)$
     \ForAll{ $X \rightarrow Y \in F_m$}
         \While{ $Z \rightarrow Y \in F_m$ exists}
             \State $G \gets F_m \backslash (Z \rightarrow Y)$
@@ -131,9 +131,9 @@ Hogy általánosságban működhessen az algoritmus, elsőnek a felesleges vált
     \EndFunction
     \hfill \break
     
-    \Function{createFullandPartialDependencies}{$R$}
-    \State $F_p = []$
-    \State $F_f = removeRedundantDependencies(R)$
+    \Function{teljes\_és\_részleges\_függéshalmaz\_készítő}{$R$}
+    \State $F_p = \emptyset$
+    \State $F_f = nelkulozheto\_fugges\_eltavolito(R)$
     \ForAll{$X \rightarrow Y \in F_f$}
         \If{$X \subseteq \{\text{lehetséges kulcsok halmazai}\} \text{ és } Y \not \in K$}
             \State $F_p \gets F_p \cup \{ X \rightarrow Y \}$
@@ -166,7 +166,7 @@ Legyen $R(\underline{a},\underline{b},c,d,e,f,g,h,i)$ relációséma és vegyük
     $\{b,d\} \longrightarrow \{i\}$.\break
 \end{center}
 
-A createAttributePlus algoritmusát a \ref{closedAttribute} tételben található. Az $(RS,LS,LR)$ hármas az elemek vizsgálatából adódik és a példában az alábbi halmazok jönnek így létre:
+Az $(RS,LS,LR)$ hármas az elemek vizsgálatából adódik és a példában az alábbi halmazok jönnek így létre:
 
 \begin{center}
     $RS: \{c,e,g,h,i\}$ \break
@@ -175,7 +175,7 @@ A createAttributePlus algoritmusát a \ref{closedAttribute} tételben találhat�
 \end{center}
 
 Ebben a példában is látható, hogy a kulcs megegyezik az $LS$ halmazzal.\par
-A következő folyamat a removeExtraneousAttributes, amely eltávolítja a függésekből az implied extraneous attribútumokat. A függvény futtatása után az alábbi függéshalmazt kapjuk vissza:
+A következő folyamat a extraneous\_attribútum\_eltávolító, amely eltávolítja a függésekből az implied extraneous attribútumokat. A függvény futtatása után az alábbi függéshalmazt kapjuk vissza:
 
 \begin{center}
     $\{b\} \longrightarrow \{d\}$, 
@@ -191,7 +191,7 @@ A következő folyamat a removeExtraneousAttributes, amely eltávolítja a függ
 
 Vegyük például a $\{b,d\} \longrightarrow \{f\}$-et. Ebben a függésben a $d$ implied extraneous attribútum, mivel $\{b\} \longrightarrow \{d\}$ is teljesül. Emiatt $f$ meghatározásához nincs szükség a $d$ attribútumra, így elhagyható a függésből. \par
 
-Ezután legyen a removeRedundantDependencies, amely azokat a függéseket távolítja el, amelyek nem relevánsak a halmazban. Ebben a példában ezek a következők:
+Ezután legyen a nélkülözhető\_függés\_eltávolító, amely azokat a függéseket távolítja el, amelyek nem relevánsak a halmazban. Ebben a példában ezek a következők:
 
 \begin{center}
     $\{f\} \longrightarrow \{d\}$, 
@@ -205,7 +205,7 @@ Ezután legyen a removeRedundantDependencies, amely azokat a függéseket távol
 
 Láthatjuk, hogy például a $\{b\} \longrightarrow \{d\}$ függés eltűnt, mivel a  $\{b\} \longrightarrow \{f\}$ és $\{f\} \longrightarrow \{d\}$ is fennáll. Így az első függés elhagyható, mivel már a $\{b\}^+ \subseteq {f}^+$, így törlődik. 
 
-Végül pedig válasszuk szét a createFullandPartialDependencies függvény segítségével a függéseinket. Ez alapján a két halmaz:
+Végül pedig válasszuk szét a teljes\_és\_részleges\_függéshalmaz\_készítő függvény segítségével a függéseinket. Ez alapján a két halmaz:
 
 \begin{center}
     $F_p = \{ \{f\} \longrightarrow \{d\}, 
@@ -231,33 +231,34 @@ Mostmár minden készenáll a \textbf{2NF} bemutatásához:
 
 \begin{algorithmic}
     \Function{2NF}{$R$}
-        \State $R2nf \gets []$
-        \State $G \gets createFullandPartialDependencies(R)[0]$
+        \State $R_{2nf} \gets \emptyset$
+        \State $G \gets teljes\_es\_reszleges\_fuggeshalmaz\_keszito(R)[0]$
+        \State $F_f \gets teljes\_es\_reszleges\_fuggeshalmaz\_keszito(R)[1]$
         \If{$G == \emptyset$}
             \State \textbf{return} $[R]$
         \EndIf
-        \If{$createFullandPartialDependencies(R)[1] \not = \emptyset$}
-            \State $X_f \gets createFullandPartialDependencies(R)[1] elements$
+        \If{$F_f \not = \emptyset$}
+            \State $X_f \gets F_f \text{-ben lévő függések elemei}$
         \Else
             \State $X_f \gets A$
         \EndIf
         \ForAll{$X \longrightarrow Y \in G$}
             \If{$X \in K \text{ és } G \not = \emptyset$}
-                \State $R(X^+_G).keys \gets X$
+                \State $R(X^+_G).kulcsok \gets X$
                 \State $X_f \gets X_f \backslash \{x_i \in X_f \big | x_i \not \in K \text{ és } x_i \in Y_G^+ \}$
                 \State $G \gets G \backslash \{ U \rightarrow V \in G \big | U \in Y_G^+ \}$
-                \State $R2nf \gets R(X^+_G)$
+                \State $R_{2nf} \gets R(X^+_G)$
             \EndIf
         \EndFor
-        \State $R2nf \gets R2nf \cup R(X_f)$
-        \State $R(X_f).keys \gets X_f$
+        \State $R_{2nf} \gets R2nf \cup R(X_f)$
+        \State $R(X_f).kulcsok \gets X_f$
         \State \textbf{return} $R2nf$
     \EndFunction
 \end{algorithmic}
 
 A cikkhez képest itt viszont egy kisebb eltérés található, az az $X_f$ meghatározása. Mivel a négy típusfeladatból három esetben nincs teljes függés, emiatt az $X_f$-be ebben az esetben a teljes attribútumlistát kell elhelyezni. Ez azért fog kelleni, mert ha az $X_f$ nem tartalmaz elemet, abban az esetben minden új reláció üres halmazzal lenne megvalósítva. \par
 
-A cikkben található \textbf{3NF} azért nem lett végül kidolgozva, mivel az algoritmus egyes feladattípusokon nem működőképes. Vegyünk egy példát a zárt feladat típus esetén:
+A cikkben található \textbf{3NF} azért nem lett végül kidolgozva, mivel az algoritmus egyes feladattípusokon nem működőképes. Vegyünk egy példát a zárt feladat típus esetén!
 
 \begin{pld}
 Legyen $R(a,b,c,d,e,f,g,h)$ és legyen $F$ az alábbi függéshalmaz:
@@ -272,7 +273,7 @@ Ennek a \textbf{2NF} alakja a következő:
     $R1(b,d,e,f,g,h)$ \break
     $R2(a,c,f)$
 \end{center}
-És a cikkben található algoritmus alapján az alábbi relációmodell lenne a \textbf{3NF}:
+A cikkben található algoritmus alapján az alábbi relációmodell lenne a \textbf{3NF}:
 \begin{center}
     $R1(a,b,d,e,h)$ \break
     $R2(b,f,g)$ \break
@@ -287,6 +288,6 @@ Viszont elég lenne az $\{e,h\} \longrightarrow \{d\}$ mentén bontani, ami meg 
 \end{center}
 \end{pld}
 
-\section{Összegzés}
-
-Ebben a fejezetben láthatjuk, hogy hogyan lehet általánosságban egy relációs sémát a megfelelő alakra hozni, így ezeket egy függvényhívás segítségével megvalósítani. Látható, hogy a \textbf{2NF} meghatározás nem a mindig a legegyszerűbb meghatározni, és látható, hogy milyen folyamatok történnek egy \nfk-re hozásig. Innentől már csak implementálni kell a moodle-be ezeket a folyamatokat. 
+%\section{Összegzés}
+%
+%Ebben a fejezetben láthatjuk, hogy hogyan lehet általánosságban egy relációs sémát a megfelelő %alakra hozni, így ezeket egy függvényhívás segítségével megvalósítani. Látható, hogy a \textbf{2NF} %meghatározás nem a mindig a legegyszerűbb meghatározni, és látható, hogy milyen folyamatok történnek %egy \nfk-re hozásig. Innentől már csak implementálni kell a moodle-be ezeket a folyamatokat. 

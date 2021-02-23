@@ -6,9 +6,9 @@
 % ez letölthetõ a http://www.math.bme.hu/latex/ weblapról, a magyar nyelvû szedéshez
 % Hasznos információk, linekek, LaTeX leirasok a www.latex.lap.hu weboldalon vannak.
 %
-
-
 \documentclass[12pt]{report}
+\usepackage{setspace}
+\onehalfspacing
 
 %Magyar nyelvi támogatás (Babel 3.7 vagy késõbbi kell!)
 \usepackage[utf8]{inputenc}
@@ -35,7 +35,7 @@
 \usepackage{algpseudocode}
 
 %tetelszerû környezetek definiálhatók, ezek most fejezetenkent egyutt szamozodnak, pl.
-\newtheorem{tet}{tetel}[chapter]
+\newtheorem{tet}{Tétel}[chapter]
 \newtheorem{defi}[tet]{Definíció}
 \newtheorem{lemma}[tet]{Lemma}
 \newtheorem{áll}[tet]{Állítás}
@@ -71,6 +71,7 @@
 
 \lstset{
   language        = php,
+  xleftmargin     = 5.0ex,
   basicstyle      = \small\ttfamily,
   keywordstyle    = \color{mypurple},
   stringstyle     = \color{myred},
@@ -84,7 +85,7 @@
   emphstyle       =[2]\color{myyellow},
   emph            =[3]{function},
   emphstyle       =[3]\color{myorange},
-  emph            =[4]{require_once},
+  emph            =[4]{require_once,require_login},
   emphstyle       =[4]\color{mypurple}
 }
 
@@ -128,7 +129,6 @@
 
 \vspace*{3.8cm}
 
-
 {\LARGE\bf Feladatgeneráló program készítése relációs adatmodell sémáinak normalizálásához}
 
 
@@ -171,6 +171,7 @@ Szeged
 \input{Fejezetek/Solver}
 \input{Fejezetek/MoodleGeneral}
 \input{Fejezetek/MoodlePlugin}
+\input{Fejezetek/Osszefoglalas}
 \input{Fejezetek/Fuggelek}
 \input{Fejezetek/Nyilatkozat}
 \input{Fejezetek/Koszonetnyilvanitas}

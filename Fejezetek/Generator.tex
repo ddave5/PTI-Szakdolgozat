@@ -9,10 +9,10 @@ A következő, amit érdemes figyelembe venni, hogy mennyi attribútumból és m
 Ebben az esetben az $\{a,b\} \rightarrow \{c\}$ függés nem fog kelleni. Ez bonyolíthat egy feladatot, de nem fogja segíteni a normalizálás módszerét, így ezeket a típusú feladatokat nem fog generálni. \par
 A következő 4 fajta feladattípus van megvalósítva:
 \begin{itemize}
-    \item Egyszerű, ahol a függésekből szinte azonnal látszik, hogy melyik fogja sérteni a \textbf{2NF} és \textbf{3NF} normalizálást. Ezek szoktak lenni a ZH feladatok, így a diákok tudnak készülni és gyakorolni ezen feladatok alapján.
+    \item Egyszerű, ahol a függésekből szinte azonnal látszik, hogy melyik fogja sérteni a \textbf{2NF} és \textbf{3NF} normálformát. Ezek a leggyakoribb példa- és tesztfeladatok így a diákok tudnak készülni ezen feladatok alapján.
     \item Dupla, ahol a függéseket 2 felé lehet venni és a két csoport egyértelműen mutatja a \nfk-et és \nfh-et sértő függéseket.
     \item Összetett, ahol több attribútum is szerepel a függések jobb-, illetve baloldalán. Ezek megoldása már igényel rutint és nem látszik egyértelműen, hogy hogyan kell felbontani az eredeti relációsémát.
-    \item Zártság, ahol nem elég végignézni azt, hogy melyik függés sértheti a \nfk-et vagy a \nfh-et, hanem azt is meg kell vizsgálni, hogyha az a függés alapján szedjük szét, akkor tényleg a relációs modell teljesíti az adott normálformát.
+    \item Zártság, ahol nem elég végignézni azt, hogy melyik függés sértheti a \nfk-et vagy a \nfh-et, hanem azt is meg kell vizsgálni, hogy ha azt a függés alapján szedjük szét, akkor tényleg a relációs modell teljesíti az adott normálformát.
 \end{itemize}
 
 Ezenkívül minden feladat esetén szabályokat vezetünk be, amely alapján történik a generálás. Ezek a szabályok:
@@ -35,11 +35,14 @@ Végezetül pedig vezessünk be pár jelölést:
 Egyszerűbb feladat esetén a függések vizsgálatánál is egyértelműen fog látszani, hogy melyek lehetnek sértőek a \nfk-re, \nfh-re és a \BCNF-re.
 \begin{pld}
     Legyen $R(\underline{a},b,c,d,e,f,\underline{g})$ és legyen $F$:
-    \begin{center}
-        $\{a\} \longrightarrow \{b,d,e\}$ \break
-        $\{a,g\} \longrightarrow \{f\}$ \break
-        $\{d,e\} \longrightarrow \{b,c\}$ \break
-    \end{center}
+    $$
+    \begin{matrix}
+    \{a\} & \longrightarrow & \{b,d,e\}\\
+    \{a,g\} & \longrightarrow &  \{f\} \\
+    \{d,e\}  & \longrightarrow & \{b,c\}
+    \end{matrix}
+    $$
+    
     és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor látszik, hogy az $\{a\} \rightarrow \{b,d,e\}$ függés sérti a \nfk-t, mivel nem minden másodlagos attribútum függ teljesen bármely kulcstól. Emiatt ezen függés felbontása esetén kapjuk az alábbi felbontást:
     \begin{center}
         $R_1(\underline{a},f,\underline{g})$ \break
@@ -62,7 +65,7 @@ Az egyszerű feladat esetén a szabályok meghatározása a következő:
 \begin{itemize}
     \item $7-9$ attribútuma legyen a relációnak,
     \item $\floor*{\frac{n}{3}}$ darab kulcs legyen, ahol $n$ attribútumok száma,
-    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
     \item $3$ függésből álljon: kettő részleges, egy teljes függésből,
     \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
     \item $1. $ függés: $\big \{ 1 \text{ és } (|K|-1) \text{ közötti elem} \big\} \longrightarrow \big\{ n-5 \text{ db elem} \big \}$
@@ -77,15 +80,18 @@ Azáltal, hogy az attribútumszám és a függéseken belüli elemszámok nem á
 \section{Dupla feladat bemutatása}
 
 \subsection{Általános szemlélet}
-Dupla feladat esetén a megoldáshoz nem csak egy függés van, amely sérti a \nfk-et és a \nfh-et. Így elsődleges feladata ennek a típusnak, hogy ne csak keressen egy függést, amely sérti a normálformákat, hanem ellenőrizze, hogy az adott relációs modell már teljesíti-e, vagy még mindig van-e benne sértő függés
+Dupla feladat esetén a megoldáshoz nem csak egy függés van, amely sérti a \nfk-et és a \nfh-et. Így elsődleges feladata ennek a típusnak, hogy a diák ne csak keressen egy függést, amely sérti a normálformákat, hanem ellenőrizze, hogy az adott relációs modell már teljesíti-e, vagy még mindig van-e benne sértő függés.
 \begin{pld}
     Legyen $R(a,\underline{b},c,\underline{d},e,f,g,h,\underline{i})$ és legyen $F$:
-    \begin{center}
-        $\{b,i\} \longrightarrow \{a,e,h\}$ \break
-        $\{d\} \longrightarrow \{c,e,g,f\}$ \break
-        $\{c,f\} \longrightarrow \{e,g\}$ \break
-        $\{h\} \longrightarrow \{a\}$ \break
-    \end{center}
+
+    $$
+    \begin{matrix}
+    \{b,i\} & \longrightarrow & \{a,e,h\}\\
+    \{d\} & \longrightarrow &  \{c,e,g,f\} \\
+    \{c,f\}  & \longrightarrow & \{e,g\} \\
+    \{h\}  & \longrightarrow &\{a\} 
+    \end{matrix}
+    $$
     és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor láthatjuk, hogy a  $\{b,i\} \longrightarrow \{a,e,h\}$ sérti a \nfk-t, így e mentén bontva a relációs modellt a következő jön létre:
     \begin{center}
         $R_1(a,\underline{b},e,h,\underline{i})$ \break
@@ -116,7 +122,7 @@ A dupla feladat esetén a következő szabályokat tartjuk be:
 \begin{itemize}
     \item $9$ attribútuma legyen a relációnak,
     \item $3$ darab kulcs legyen,
-    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
     \item $4$ függésből álljon: négy részleges függésből,
     \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
     \item $1.$ függés: $\big \{ (|K|-1) \text{ db elem} \big\} \longrightarrow \big\{ 3 \text{ és } 4 \text{ közötti elem} \big \}$
@@ -189,7 +195,7 @@ Az összetett feladat esetén a következő szabályokat tartjuk be:
 \begin{itemize}
     \item $7-8$ attribútuma legyen a relációnak,
     \item $2$ darab kulcs legyen,
-    \item Kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
+    \item kulcsok halmaza egyezzen meg az elsődleges attribútumok halmazával,
     \item $3$ függésből álljon: három részleges függésből,
     \item $1.$ függés: $\big\{ a_i \in A \big| a_i \text{ kulcselem}  \big\} \longrightarrow \big\{  a_i \in A \big| a_i \text{ nem kulcselem}  \big\}$ 
     \item $1.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{ 2 \text{ db elem} \big \}$
@@ -243,7 +249,7 @@ Az zárt feladat esetén a következő szabályokat tartjuk be:
     \item $1.$ függés: $\big \{ |K|-1 \text{ db elem} \big\} \longrightarrow \big\{ 3 \text{ és } 4 \text{ közötti elem} \big \}$
     \item $2.$ függés: $\big\{ K \backslash \text{elsődleges attribútum} \big\} \longrightarrow \big\{ 1.Fg \rightarrow Bo \cup \{ a_i \in A \big| a_i \not \in 1.Fg \rightarrow Jo  \big\}$ 
     \item $2.$ függés: $\big \{ 1 \text{ db elem} \big\} \longrightarrow \big\{ 2 \text{ db elem} \big \}$
-    \item $3.$ függés: $\big\{  1.Fg \rightarrow Jo \backslash \text{elsődleges attribútum} \big\} \longrightarrow \big\{ 1.Fg \rightarrow Jo \backslash (\text{elsődleges attribútum} \cup 3.Fg \rightarrow Bo  \big \}$
+    \item $3.$ függés: $\big\{  1.Fg \rightarrow Jo \backslash \text{elsődleges attribútum} \big\} \longrightarrow \big\{ 1.Fg \rightarrow Jo \backslash (\text{elsődleges attribútum } \cup 3.Fg \rightarrow Bo  \big \}$
     \item $3.$ függés: $\big \{ 1 \text{ és } 2 \text{ közötti elem} \big\} \longrightarrow \big\{1 \text{ db elem} \big \}$
     \item $4.$ függés: $\big\{ K \backslash 1.Fg \rightarrow Bo \big\} \longrightarrow \big\{ A \backslash (K \cup 1.Fg \rightarrow Jo \cup 2.Fg \rightarrow Jo  \big \}$
     \item $4.$ függés: $\big \{ 2 \text{ db elem} \big\} \longrightarrow \big\{1 \text{ db elem} \big \}$
@@ -251,4 +257,4 @@ Az zárt feladat esetén a következő szabályokat tartjuk be:
 
 \section{Összegzés}
 
-Jól látni, hogy relációs modell és relációs modell közt hatalmas különbség lehet összetettség szempontjából. Lehetne még bemutatni néhány speciális esetet, viszont ez a négy típusú feladat begyakorlása már elég tudást adhat egy most tanuló diáknak a definíciók és megoldások megismerésére és használatára. 
+Jól látni, hogy relációs modell és relációs modell közt hatalmas különbség lehet összetettség szempontjából! Be lehetne még mutatni néhány speciális esetet, viszont ennek a négy típusú feladat begyakorlása már elég tudást adhat egy most tanuló diáknak a definíciók és megoldások megismerésére és használatára. 
