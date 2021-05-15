@@ -1,4 +1,4 @@
-\chapter{A feladatok megoldása}
+\chapter{A feladatok megoldása \cite{normalcikk}}
 
 \section{Az általános megoldás problémái}
 
@@ -46,7 +46,7 @@ Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{
 \end{algorithmic}
 \hfill \break
 Ez a pszeudokód pedig végignézi az összes relációsémához tartozó függések bal oldalát, és ha az nem szuperkulcs, akkor felbontja az által és így hoz létre egy új relációsémát. \par
-A gond leginkább a \nfk-nál fog történni. Az egyszerű feladat esetén meg kell keresni egyszer a részkulcs közvetlen függéseit, dupla esetén többször is ellenőrizni kell, zártság esetén pedig nem elég a közvetlen függéseket ellenőrizni, hanem teljesen a részkulcs zárt részhalmazát kell venni. Emiatt érdemes egy olyan függvényt létrehozni, amely átlalánosságban készíti el a relációs modell \textbf{2NF} alakját. Viszont az alábbi tétel segíthet nekünk ebben
+A gond leginkább a \nfk-nél fog történni. Az egyszerű feladat esetén meg kell keresni egyszer a részkulcs közvetlen függéseit, dupla esetén többször is ellenőrizni kell, zártság esetén pedig nem elég a közvetlen függéseket ellenőrizni, hanem teljesen a részkulcs zárt részhalmazát kell venni. Emiatt érdemes egy olyan függvényt létrehozni, amely átlalánosságban készíti el a relációs modell \textbf{2NF} alakját. Viszont az alábbi tétel segíthet nekünk ebben
 
 \begin{tet}
 Legyen $R$ egy \textbf{1NF}-ben lévő relációséma, $F$ a sémához tartozó függéshalmaz és $F_p$ pedig a részleges függéseinek halmaza. Ekkor

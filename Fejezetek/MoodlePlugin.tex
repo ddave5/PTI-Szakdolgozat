@@ -1,4 +1,4 @@
-\chapter{Moodle plug-in készítés folyamata}
+\chapter{Moodle plug-in készítés folyamata \cite{MoodleTutorial}}
 
 \section{Előzetes ötletek, első lépések}
 
@@ -60,7 +60,9 @@ echo $OUTPUT->header();
 \end{lstlisting}
 
 Az index.php oldal csak lekérjük az aktuális felhasználó kurzuson belüli rangját és az alapján a tanári vagy a diák részre irányítjuk. Mivel minden plugin az index.php oldalon indul, ezért ez csak ennyi szerepet tölt be számunkra. \par
-Ha diák lép be, akkor ő a feladatok kitöltése oldalakra fog tudni menni. Itt elsőnek ki kell választania egy nehézségi szintet (könnyű, közepes és nehéz), majd onnan továbbmegy a feladat kitöltése oldalra. Ott meg tudja adni az ő általa gondolt jó választ, és miután beküldte, egyből láthatja is a megoldást. Végezetül pedig az alábbi adatok alapján kimentjük az adatokat:
+Ha diák lép be, akkor ő a feladatok kitöltése oldalakra fog tudni menni. Itt elsőnek ki kell választania egy nehézségi szintet (könnyű, közepes és nehéz), majd onnan továbbmegy a feladat kitöltése oldalra. Ott meg tudja adni az ő általa gondolt jó választ, és miután beküldte, egyből láthatja is a megoldást és a pontszámát.
+A pontszámítás részt Korom Richárd munkája, amit az ő szakdolgozatában fejt ki bővebben.\cite{ricsidoga1}\cite{ricsidoga2}
+Végezetül pedig az alábbi adatok alapján kimentjük az adatokat:
 \begin{itemize}
     \item név,
     \item e-mail cím,
@@ -77,6 +79,7 @@ Ha diák lép be, akkor ő a feladatok kitöltése oldalakra fog tudni menni. It
 A feladatok megoldását nem lenne fontos megtennünk, viszont a tanároknak az ellenőrzés szempontjából egyszerűbb és átláthatóbbá válik, ha a szemük előtt van és nem kell abban a pillanatban megoldani. \par
 
 A tanári felületen két gomb található: egyikkel mi is meg tudunk oldani feladatot, ekkor ugyanarra az oldalra történik az irányítás, amelyet a diákok látnak. A másik gomb segítségével pedig egy keresőfelületre irányít minket a plugin, amelyen keresztül le tudunk kérdezni adatokat. Meg lehet adni nevet, e-mail címet és kezdeti és végdátumot, hogyha például arra lennénk kíváncsiak, hogy ebben az évben a diákok milyen megoldásokat adtak le. A felület a kitöltött adatok alapján kiírja az összes találatot, amely megfelel a keresésnek.
+
 
 \section{Képernyőképek}
 
@@ -105,11 +108,6 @@ A tanári felületen két gomb található: egyikkel mi is meg tudunk oldani fel
     \includegraphics[scale=0.4]{Fejezetek/Images/magyar05.png}
     \caption{Tanári felület magyar nyelven}
 \end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{Fejezetek/Images/magyar06.png}
-    \caption{Keresőfelület magyar nyelven}
-\end{figure}
 
 \begin{figure}
     \centering
@@ -135,9 +133,4 @@ A tanári felületen két gomb található: egyikkel mi is meg tudunk oldani fel
     \centering
     \includegraphics[scale=0.4]{Fejezetek/Images/english05.png}
     \caption{Tanári felület angol nyelven}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{Fejezetek/Images/englis06.png}
-    \caption{Keresőfelület angol nyelven}
 \end{figure}

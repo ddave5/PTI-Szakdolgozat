@@ -6,11 +6,11 @@ A következő, amit érdemes figyelembe venni, hogy mennyi attribútumból és m
 \begin{center}
     $\{a\} \longrightarrow \{c\}$, $\{b\} \longrightarrow \{c\}$, $\{a,b\} \longrightarrow \{c\}$
 \end{center}
-Ebben az esetben az $\{a,b\} \rightarrow \{c\}$ függés nem fog kelleni. Ez bonyolíthat egy feladatot, de nem fogja segíteni a normalizálás módszerét, így ezeket a típusú feladatokat nem fog generálni. \par
+Ebben az esetben az $\{a,b\} \rightarrow \{c\}$ függés nem fog kelleni. Ez bonyolíthat egy feladatot, de nem fogja segíteni a normalizálás módszerének elsajátítását, így ezeket a típusú feladatokat nem fogja generálni. \par
 A következő 4 fajta feladattípus van megvalósítva:
 \begin{itemize}
     \item Egyszerű, ahol a függésekből szinte azonnal látszik, hogy melyik fogja sérteni a \textbf{2NF} és \textbf{3NF} normálformát. Ezek a leggyakoribb példa- és tesztfeladatok így a diákok tudnak készülni ezen feladatok alapján.
-    \item Dupla, ahol a függéseket 2 felé lehet venni és a két csoport egyértelműen mutatja a \nfk-et és \nfh-et sértő függéseket.
+    \item Dupla, ahol a függéseket kétfelé lehet venni és a két csoport egyértelműen mutatja a \nfk-et és \nfh-et sértő függéseket.
     \item Összetett, ahol több attribútum is szerepel a függések jobb-, illetve baloldalán. Ezek megoldása már igényel rutint és nem látszik egyértelműen, hogy hogyan kell felbontani az eredeti relációsémát.
     \item Zártság, ahol nem elég végignézni azt, hogy melyik függés sértheti a \nfk-et vagy a \nfh-et, hanem azt is meg kell vizsgálni, hogy ha azt a függés alapján szedjük szét, akkor tényleg a relációs modell teljesíti az adott normálformát.
 \end{itemize}
@@ -32,7 +32,7 @@ Végezetül pedig vezessünk be pár jelölést:
 \section{Egyszerű feladat bemutatása}
 
 \subsection{Általános szemlélet}
-Egyszerűbb feladat esetén a függések vizsgálatánál is egyértelműen fog látszani, hogy melyek lehetnek sértőek a \nfk-re, \nfh-re és a \BCNF-re.
+Egyszerűbb feladat esetén a függések vizsgálatánál is egyértelműen fog látszani, hogy melyek lehetnek sértőek a \nfk-re, \nfh-re és a \BCNF-re. \par
 \begin{pld}
     Legyen $R(\underline{a},b,c,d,e,f,\underline{g})$ és legyen $F$:
     $$
@@ -43,12 +43,12 @@ Egyszerűbb feladat esetén a függések vizsgálatánál is egyértelműen fog 
     \end{matrix}
     $$
     
-    és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor látszik, hogy az $\{a\} \rightarrow \{b,d,e\}$ függés sérti a \nfk-t, mivel nem minden másodlagos attribútum függ teljesen bármely kulcstól. Emiatt ezen függés felbontása esetén kapjuk az alábbi felbontást:
+\noindent és tegyük fel, hogy teljesül az \textbf{1NF}. Ekkor látszik, hogy az $\{a\} \rightarrow \{b,d,e\}$ függés sérti a \nfk-t, mivel nem minden másodlagos attribútum függ teljesen bármely kulcstól. Emiatt ezen függés felbontása esetén kapjuk az alábbi felbontást:
     \begin{center}
         $R_1(\underline{a},f,\underline{g})$ \break
         $R_2(\underline{a},b,c,d,e)$
     \end{center}
-    A \textbf{3NF} esetén látni lehet, hogy $\{a\} \rightarrow \{b,d,e\}$ és $\{d,e\} \rightarrow \{b,c\}$ fogja sérteni, mivel található tranzitív függés az attribútumok közt. Emiatt a \nfh-nek megfelelő relációs modell
+    A \textbf{3NF} esetén látni lehet, hogy $\{a\} \rightarrow \{d,e\} \rightarrow \{c\}$ fogja sérteni, mivel található tranzitív függés az attribútumok közt. Emiatt a \nfh-nek megfelelő relációs modell
     \begin{center}
         $R_1(\underline{a},f,\underline{g})$ \break
         $R_2(\underline{a},\underline{d},\underline{e})$ \break
@@ -143,15 +143,15 @@ Azáltal, hogy a függéseken belüli elemszámok nem állandóak, a gondolatmen
 Ennél a feladattípus csak azoknak ajánlatos, akik a másik két feladatot meg tudták csinálni. Ami miatt ez a feladattípus nehezebb, mint az előzőek, érdemes megvizsgálni az attribútumok elhelyezkedését. Legyen $ls$ azon attribútumok halmaza, amelyek csak a függőségek bal oldalán található, $rs$ amelyek csak a jobb oldalon és $lr$ pedig amelyek mindkét helyen.
 Egyszerű feladat esetén:
 \begin{center}
-    $ls = \{$a,g$\}$ \break
-    $rs = \{$b,c,f$\}$ \break
-    $lr = \{$d,e$\}$
+    $ls = \{a, g\}$ \break
+    $rs = \{b, c, f\}$ \break
+    $lr = \{d, e\}$
 \end{center}
 Dupla feladat esetén: 
 \begin{center}
-    $ls = \{$b,d,i$\}$ \break
-    $rs = \{$a,e,g$\}$ \break
-    $lr = \{$c,f,h$\}$
+    $ls = \{b, d, i\}$ \break
+    $rs = \{a, e, g\}$ \break
+    $lr = \{c, f, h\}$
 \end{center}
 
 Mindkét esetben látszik, hogy $ls$ a kulcsok halmaza lesz, $lr$ pedig azok az elemeket tartalmazza, melyek azon függőségek bal oldalán található, amely sérti a \nfh-et. Ha ezt a gondolatot ismerjük, akkor elég gyorsan meg tudjuk csinálni ezeket a feladattípusokat.
@@ -159,19 +159,22 @@ Viszont az Összetett feladat esetén más lesz a helyzet:
 
 \begin{pld}
 Legyen $R(\underline{a},b,\underline{c},d,e,f,g)$ és legyen $F$:
-\begin{center}
-    $\{a\} \longrightarrow \{d,e\}$ \break
-    $\{c,e\} \longrightarrow \{b,f\}$ \break
-    $\{d,f\} \longrightarrow \{g\}$ \break
-\end{center}
-A \nfk-re hozáshoz elsőnek a $\{a\} \longrightarrow \{d,e\}$ függés alapján kell egy darabolást csinálni a relációos modellen, így pedig
+
+    $$
+    \begin{matrix}
+        \{a\} & \longrightarrow & \{d,e\} \\
+        \{c,e\} & \longrightarrow &\{b,f\} \\
+        \{d,f\} & \longrightarrow & \{g\} \break
+    \end{matrix}
+    $$
+A \nfk-re hozáshoz elsőnek a $\{a\} \longrightarrow \{d,e\}$ függés alapján kell egy darabolást csinálni a relációs modellen, így pedig
 \begin{center}
     $R_1(\underline{a},d,e)$ \break
     $R_2(\underline{a},b,\underline{c},f,g).$ \break
 \end{center}
 Ezzel teljesül is a \nfk, viszont érdemes megvizsgálni a  $\{c\} \longrightarrow \{b,f\}$ függést is $R_2$ben. Mivel  $\{c,e\} \longrightarrow \{b,f\}$ és $\{f\} \longrightarrow \{g\}$, így ezen felbontások mentén pont $R_2$-t kapnánk, ezért vagyunk kész.
 \textbf{3NF} esetén keressük meg azt a függőségpárt, amely problémás lehet. Kulcsból kell indulni, amelyre csak a $\{a\} \longrightarrow \{d,e\}$ és $\{c,e\} \longrightarrow \{b,f\}$  teljesül. Viszont külön külön egyik sem lesz tranzitív függésben $\{d,f\} \longrightarrow \{g\}$-zel, így a séma már \nfh-ban is van.
-Legutolsónak viszont meg kell vizsgálni, hogy teljesül-e a \textbf{BCNF} is. $R_1$ esetén igen, mivel $\{a\} \longrightarrow \{d,e\}$ következik, és $'a'$ a relációséma szuperkulcsa. Mindazonáltal $R_2$-nél más a helyzet. 
+Legutolsónak viszont meg kell vizsgálni, hogy teljesül-e a \textbf{BCNF} is. $R_1$ esetén igen, mivel $\{a\} \longrightarrow \{d,e\}$ következik, és $a$ a relációséma szuperkulcsa. Mindazonáltal $R_2$-nél más a helyzet. 
 $\{c\} \longrightarrow \{b,f\}$ függés biztosan sérti a \BCNF-et, mivel nem a teljes kulcsból történik a függés, így a megfelelő relációs modell:
 \begin{center}
     $R_1(\underline{a},d,e)$ \break
@@ -183,9 +186,9 @@ $\{c\} \longrightarrow \{b,f\}$ függés biztosan sérti a \BCNF-et, mivel nem a
 
 A példa után nézzük meg, hogy az $ls$, $rs$ és $lr$ halmazok hogyan néznek ki:
 \begin{center}
-    $ls = \{$a,c$\}$ \break
-    $rs = \{$b,g$\}$ \break
-    $lr = \{$d,e,f$\}$
+    $ls = \{a, c\}$ \break
+    $rs = \{b, g\}$ \break
+    $lr = \{d, e, f\}$
 \end{center}
 
 A kulcs még mindig az $ls$ halmazzal egyezik meg, de az $lr$ halmazra nem teljesül, hogy a \textbf{3NF} sértő függések bal oldali attribútumaival egyezik meg. Így ezen feladatok már egy nagyobb és pontosabb rálátást igényelnek.
@@ -255,6 +258,6 @@ Az zárt feladat esetén a következő szabályokat tartjuk be:
     \item $4.$ függés: $\big \{ 2 \text{ db elem} \big\} \longrightarrow \big\{1 \text{ db elem} \big \}$
 \end{itemize}
 
-\section{Összegzés}
+%\section{Összegzés}
 
-Jól látni, hogy relációs modell és relációs modell közt hatalmas különbség lehet összetettség szempontjából! Be lehetne még mutatni néhány speciális esetet, viszont ennek a négy típusú feladat begyakorlása már elég tudást adhat egy most tanuló diáknak a definíciók és megoldások megismerésére és használatára. 
+%Jól látni, hogy relációs modell és relációs modell közt hatalmas különbség lehet összetettség szempontjából! Be lehetne még mutatni néhány speciális esetet, viszont ennek a négy típusú feladat begyakorlása már elég tudást adhat egy most tanuló diáknak a definíciók és megoldások megismerésére és használatára. 

@@ -1,4 +1,4 @@
-\chapter{Általános definíciók}
+\chapter{Általános definíciók \cite{adatb}}
 \section{Adatbázis, adatmodell}
 
 \begin{defi}[Adat]
@@ -49,7 +49,7 @@ Vegyünk egy hétköznapi példát egy relációs adatbázis-modellre:\par
     Könyv(\underline{ISBN}, \textit{kiadókód}, író, cím, megjelenés éve)\par
     Kiadó(\underline{kiadókód}, kiadó neve, város, cím)\par
 
-Ebben a példában az ISBN egy attribútum, az $\{\text{ISBN, kiadókód, író, cím, megjelenés éve} \}$ egy attribútumhalmaz, Könyv a séma neve, $T = dom(\text{ISBN}) \times dom(\text{kiadókód})$ egy Könyv feletti $T$ reláció.
+Ebben a példában az ISBN egy attribútum, az $\{$ISBN, kiadókód, író, cím, megjelenés éve$\}$  egy attribútumhalmaz, Könyv a séma neve, $T = dom(\text{ISBN}) \times dom(\text{kiadókód})$ egy Könyv feletti $T$ reláció.
 Szuperkulcs lehet például a $\{$ISBN, kiadókód, író, cím, megjelenés éve $\}$ vagy $\{$ISBN, kiadókód$\}$ vagy $\{$ ISBN $\}$. A Könyv relációséma kulcsa az ISBN (ezt mindig aláhúzással jelöljük), a Kiadónak pedig a kiadókód. Illetve a Könyv kiadókód attribútuma lesz egy külső kulcs.
 \end{pld}
 
@@ -62,7 +62,7 @@ Legyen $R(A_1,\ldots,A_n)$ egy relációséma és $P,Q \subseteq \{A_1,\ldots,A_
 $\forall t_i, t_j \in T$ esetén $ t_i(P) = t_j(P) \Rightarrow t_i(Q) = t_j(Q)$. 
 \end{defi}
 
-\begin{defi}[Triviális/nemtriviális függés, teljesen nemtriviális függés]
+\begin{defi}[Triviális/nemtriviális függés, teljesen nemtriviális függés] \hfill \break
 Legyen $R(A_1,\ldots,A_n)$ egy relációséma és $P,Q \subseteq \{A_1,\ldots,A_n\}$. A $P \longrightarrow Q$ függést \textbf{triviális}nak nevezzük, ha $Q \subseteq P$, ellenkező esetben \textbf{nemtriviálisnak}. A $P \longrightarrow Q$ függést \textbf{teljesen nemtriviálisnak} nevezzük, ha $P \cap Q = \emptyset$.
 \end{defi}
 
@@ -125,13 +125,13 @@ Ekkor $\{a,b\}$ lezártja:
 \end{itemize}
 \end{pld}
 
-\begin{defi}[implied/nonimplied extraneous attribute]
-Legyen $R(A)$ egy relációséma és $F$ függőségi halmaz, illetve $X,Y \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy egy $A_i$ \textbf{extraneous attribútum} egy $X \longrightarrow Y$ $F$ feletti függőségben, ha $A \in (A-A_i)^+$, Ha $A_i \in (A-A_i)^+$, akkor $A_i$ \textbf{implied extraneous attribútum}, viszont ha csak extraneous, de nem implied, akkor \textbf{nonimplied extraneous attribútum}.
+\begin{defi}[Belső/külső idegen attribútum]
+Legyen $R(A)$ egy relációséma és $F$ függőségi halmaz, illetve $X,Y \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy egy $A_i$ \textbf{idegen attribútum}(extraneous attribute) egy $X \longrightarrow Y$ $F$ feletti függőségben, ha $A \in (A-A_i)^+$. Ha $A_i \in (A-A_i)^+$, akkor $A_i$ \textbf{belső idegen attribútum}(implied extraneous attribute), viszont ha csak idegen, de nem belső, akkor \textbf{külső idegen attribútum}(nonimplied extraneous attribute).
 \end{defi}
 
 \begin{pld}
-Vegyük $R(a,b,c)$ relációsémát és $\{a,b\} \longrightarrow \{c\}, \{a\} \longrightarrow \{c\}$ függőségeket. Ekkor $b$ nonimplied extraneous attribútum a $\{a,b\} \longrightarrow \{c\}$ függőségben. \hfill \break
-Illetve vegyünk egy másik függőségi halmazt, melynek elemei $\{a,b\} \longrightarrow \{c\}, \{a\} \longrightarrow \{b\}$. Ekkor $b$ implied extraneous attribútum a $\{a,b\} \longrightarrow \{c\}$ függőségben.
+Vegyük $R(a,b,c)$ relációsémát és $\{a,b\} \longrightarrow \{c\}, \{a\} \longrightarrow \{c\}$ függőségeket. Ekkor $b$ külső idegen attribútum a $\{a,b\} \longrightarrow \{c\}$ függőségben. \hfill \break
+Illetve vegyünk egy másik függőségi halmazt, melynek elemei $\{a,b\} \longrightarrow \{c\}, \{a\} \longrightarrow \{b\}$. Ekkor $b$ belső idegen attribútum a $\{a,b\} \longrightarrow \{c\}$ függőségben.
 \end{pld}
 
 \begin{defi}[Fölösleges függőség]
@@ -171,31 +171,31 @@ Ha egy relációséma \BCNF-ben van, akkor \nfh-ben is, ha \nfh-ben van, akkor \
 \begin{pld}
 Vegyük az alábbi relációsémát valamint függőségi halmazt:
 \begin{center}
-    Reptér(\underline{név},\underline{város},ország, napi járatszám, főváros)
+    Bolt(\underline{város}, \underline{cím}, ország, üzletlánc, logo)
 \end{center}
 $$
     \begin{matrix}
-    \{\text{név,város}\} & \longrightarrow & \{\text{napi járatszám}\} \\
-    \{\text{város}\} & \longrightarrow & \{\text{ország, főváros}\} \\
-   \{\text{ország}\}  & \longrightarrow & \{\text{főváros}\}
+    \{\text{város,cím}\} & \longrightarrow & \{\text{üzletlánc,logo}\} \\
+    \{\text{üzletlánc}\} & \longrightarrow & \{\text{logo}\} \\
+    \{\text{város}\}  & \longrightarrow & \{\text{ország}\}
     \end{matrix}
 $$
-Mivel minden attribútum elemi attribútumokból áll, ezért a relációs modell \textbf{1NF}-ben van. Viszont mivel egy város nevéből meg tudjuk hatázoni, hogy melyik országban van és mi a fővárosa, így nem minden másodlagos attribútum függ bármely kulcstól, tehát a $\{\text{város}\} \rightarrow \{\text{ország, főváros}\}$ függés sérti a \nfk-et. Emiatt ez a függőség mentén szét lehet bontani a relációs modellt az alábbira:
+Mivel minden attribútum elemi attribútumokból áll, ezért a relációs modell \textbf{1NF}-ben van. Viszont mivel egy város nevéből meg tudjuk mondani, hogy melyik országban van, így nem minden másodlagos attribútum függ bármely kulcstól, tehát a $\{\text{város}\} \rightarrow \{\text{ország}\}$ függés sérti a \nfk-et. Emiatt ez a függőség mentén szét lehet bontani a relációs modellt az alábbira:
 \begin{center}
-    Reptér(\underline{név},\underline{város},napi járatszám) \break
-    Helyezkedés(\textit{város}, ország, főváros)
+    Bolt(\underline{város},\underline{cím}, üzletlánc, logo) \break
+    Hely(\textit{város}, ország)
 \end{center}
-Ha jobban megfigyeljük, látszik, hogy a városból adódik az ország és a főváros, de az országból meg tudjuk mondani annak fővárosát, így találhatunk ebben a modellben kulcstól való tranzitív függést. Így a példánk tovább bontani a $\{\text{ország}\} \rightarrow \{\text{főváros}\}$ függés alapján, ami így néz ki:
+Ha jobban megfigyeljük, látszik, hogy a városból és a címből adódik az üzletlánc és a logo, de az üzletláncból meg tudjuk mondani annak logoját, így találhatunk ebben a modellben kulcstól való tranzitív függést. Így a példánk tovább bontani az $\{\text{üzletlánc}\} \rightarrow \{\text{logo}\}$ függés alapján, ami így néz ki:
 \begin{center}
-    Reptér(\underline{név},\underline{város},napi járatszám) \break
-    Helyezkedés(\textit{város}, \textit{ország})\break
-    Székhely(\underline{ország}, főváros)
+    Bolt(\underline{város}, \underline{cím}, üzletlánc) \break
+    Üzletlánc(\textit{üzletlánc}, \textit{logo})\break
+    Hely(\underline{város}, ország)
 \end{center}
 és így teljesíti a \nfh-et is. Végezetül láthatjuk, hogy minden egyes másodlagos attribútum nemtriviális szuperkulcsbeli elemtől függ, emiatt a feladat már teljesíti a \BCNF-et.\hfill \break
-Összegezve az példánk \BCNF alakja:
+Összegezve az példánk \textbf{BCNF} alakja:
 \begin{center}
-    Reptér(\underline{név},\underline{város},napi járatszám) \break
-    Helyezkedés(\textit{város}, \textit{ország})\break
-    Székhely(\underline{ország}, főváros)
+    Bolt(\underline{város}, \underline{cím}, üzletlánc) \break
+    Üzletlánc(\textit{üzletlánc}, \textit{logo})\break
+    Hely(\underline{város}, ország)
 \end{center}
 \end{pld}

@@ -1,4 +1,4 @@
-\chapter{Moodle általános tudnivalók}
+\chapter{Moodle általános tudnivalók \cite{MoodleDev}}
 
 A moodle egy oktatási célokra szolgáló open source webes alapú tananyagkezelő rendszer. A szerveroldali vezérlés PHP nyelven lett implementálva és SQL adatbázist használ. Széles körben elterjedt az ingyenessége és a könnyen bővíthetősége miatt az iskolákban, de még munkahelyeken is használják. Tanulóknak, tanároknak és adminisztrátoroknak is ajánlják, korszerű plug-inek tölthetőek le, személyre szabott oktatási felület hozható létre, a kurzusok dinamikusan változtathatók és így tovább. \par
 Ebben a fejezetben a Moodle rendszerről, illetve a Moodle plug-in fejlesztésről lesz leginkább szó.
@@ -28,7 +28,7 @@ A Moodle-ben az M betű a modularitást jelenti. Ez alatt azt értjük, hogy a M
 \begin{figure}
     \centering
     \includegraphics[scale=0.7]{Fejezetek/Images/moodleBuild.png} 
-    \caption{\label{Moodle}Moodle felépítése}
+    \caption{\label{Moodle}Moodle felépítése \cite{MoodleTutorial}}
 \end{figure}
 
 \subsection{A pluginek fajtái}
@@ -45,7 +45,7 @@ Jelenleg a Moodle-ben 58 fajta plugin létezik, mind teljesen különböző funk
     \item Local (Saját személyes pluginek kezelése, létrehozása) 
 \end{itemize}
 
-Természetesen minden plugin, amit a \href{https://moodle.org/plugins/}{Moodle Plugin weboldal}ról töltünk le, az a Local mappában kerül telepítésre, így a szakdolgozat mappaszerkezete is a local/szakdolgozat formát követi.
+Természetesen minden plugin, amit a Moodle Plugin weboldalról \footnote{Link:\href{https://moodle.org/plugins/}{https://moodle.org/plugins/}} töltünk le, az a Local mappában kerül telepítésre, így a szakdolgozat mappaszerkezete is a local/szakdolgozat formát követi.
 
 \section{Moodle plugin}
 
@@ -85,7 +85,7 @@ A Moodle korábban létrejött, mint azok a modern PHP keretrendszerek, amelyek 
 \begin{figure}
     \centering
     \includegraphics[scale=0.7]{Fejezetek/Images/requestHandler.png}
-    \caption{Kérés-válasz feldolgozás}
+    \caption{Kérés-válasz feldolgozás \cite{MoodleTutorial}}
 \end{figure}
 Ezen keresztül lehet látni, hogy az $id$ adattag megkapja a $42$ értéket, a könyvtárak ezen keresztül lefuttatják a megfelelő függvényeket és a választ a request handleren keresztül közlik a felhasználóval. Hogy el tudjuk érni a request handler-t szükséges elsőnek betölteni a főmappában lévő config.php fájl-t, amely az alábbi parancs segítségével történik: \par
 \begin{itemize}
@@ -164,7 +164,7 @@ parancs szükséges, viszont a index.php "törzséhez" nem kell külön az \text
 \begin{figure}
     \centering
     \includegraphics[scale=0.9]{Fejezetek/Images/print.png}
-    \caption{Kiíratási formák a Moodle-ben}
+    \caption{Kiíratási formák a Moodle-ben\cite{MoodleTutorial}}
 \end{figure}
 
 Ezenkívül lehetőségünk van különböző HTML megjelenítést és logikai elkülönítést segítő függvényeket is meghívni, ezt a html\_writer osztály-ban lévő függvények segítségével tudjuk megtenni. Például
@@ -175,10 +175,10 @@ kiíratás segítségével egy új input taget tudubk létrehozni, amely szöveg
 
 \subsection{Adatbázis használata}
 
-A Moodle-ben egy adatbázis létrehozásához és módosításához létrehoztak egy XMLDB szerkesztőt, hogy azon keresztül generáljon XML fájlokat és azok megfeleljenek a Moodle-ben használt szabályoknak. Ezt a Portálkezelés -> Fejlesztés -> XMLDB-szerkesztő-n keresztül tudjuk elérni. Ezekhez tartozó szabályokból sok van, néhány közülük:
+A Moodle-ben egy adatbázis létrehozásához és módosításához létrehoztak egy XMLDB szerkesztőt, hogy azon keresztül generáljon XML fájlokat és azok megfeleljenek a Moodle-ben használt szabályoknak. Ezt a Portálkezelés -> Fejlesztés -> XMLDB-szerkesztő menüponton keresztül tudjuk elérni. Ezekhez tartozó szabályokból sok van, néhány közülük:
 
 \begin{itemize}
-    \item Minden táblának a neve az alábbi módon kell kinéznie: plugintípus\_pluginnév\_tárolniKívántAdat.
+    \item Minden táblának a neve az alábbi módon kell kinéznie: \hfill \break plugintípus\_pluginnév\_tárolniKívántAdat.
     \item Minden táblának kell lennie egy automatikusan léptetett számlálóval.
     \item Minden tábla nevének hossza maximum 28 karakter.
     \item Minden oszlop nevének hossza maximum 30 karakter.
