@@ -1,6 +1,8 @@
-\chapter{A feladatok megoldása \cite{normalcikk}}
+\chapter{A feladatok megoldása}
 
 \section{Az általános megoldás problémái}
+
+Ez a rész a \cite{normalcikk} cikk alapján íródott.
 
 A generált feladatoknál látható, hogy nehéz mondani egy nagy, egységes megoldási módot. Pontosabban \nfh-re és \BCNF-re még lehet is megadni egy algoritmust. \textbf{3NF} esetén: \par
 Legyen egy $R(A)$ relációsémánk és tegyük fel, hogy teljesíti az \textbf{1NF}-et, illetve legyen $F$ egy $R(A)$-hoz tartozó függéshalmaz.
@@ -191,7 +193,7 @@ A következő folyamat a extraneous\_attribútum\_eltávolító, amely eltávol�
 
 Vegyük például a $\{b,d\} \longrightarrow \{f\}$-et. Ebben a függésben a $d$ implied extraneous attribútum, mivel $\{b\} \longrightarrow \{d\}$ is teljesül. Emiatt $f$ meghatározásához nincs szükség a $d$ attribútumra, így elhagyható a függésből. \par
 
-Ezután legyen a nélkülözhető\_függés\_eltávolító, amely azokat a függéseket távolítja el, amelyek nem relevánsak a halmazban. Ebben a példában ezek a következők:
+Ezután legyen a \textsc{nélkülözhető\_függés\_eltávolító}, amely azokat a függéseket távolítja el, amelyek nem relevánsak a halmazban. Ebben a példában ezek a következők:
 
 \begin{center}
     $\{f\} \longrightarrow \{d\}$, 
@@ -205,7 +207,7 @@ Ezután legyen a nélkülözhető\_függés\_eltávolító, amely azokat a függ
 
 Láthatjuk, hogy például a $\{b\} \longrightarrow \{d\}$ függés eltűnt, mivel a  $\{b\} \longrightarrow \{f\}$ és $\{f\} \longrightarrow \{d\}$ is fennáll. Így az első függés elhagyható, mivel már a $\{b\}^+ \subseteq {f}^+$, így törlődik. 
 
-Végül pedig válasszuk szét a teljes\_és\_részleges\_függéshalmaz\_készítő függvény segítségével a függéseinket. Ez alapján a két halmaz:
+Végül pedig válasszuk szét a \textsc{teljes\_és\_részleges\_függéshalmaz\_készítő} függvény segítségével a függéseinket. Ez alapján a két halmaz:
 
 \begin{center}
     $F_p = \{ \{f\} \longrightarrow \{d\}, 

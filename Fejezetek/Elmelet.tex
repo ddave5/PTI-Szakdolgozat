@@ -1,4 +1,7 @@
-\chapter{Általános definíciók \cite{adatb}}
+\chapter{Általános definíciók}
+
+Minden definíció és tétel a \cite{adatb} műből származnak.
+
 \section{Adatbázis, adatmodell}
 
 \begin{defi}[Adat]
@@ -126,7 +129,7 @@ Ekkor $\{a,b\}$ lezártja:
 \end{pld}
 
 \begin{defi}[Belső/külső idegen attribútum]
-Legyen $R(A)$ egy relációséma és $F$ függőségi halmaz, illetve $X,Y \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy egy $A_i$ \textbf{idegen attribútum}(extraneous attribute) egy $X \longrightarrow Y$ $F$ feletti függőségben, ha $A \in (A-A_i)^+$. Ha $A_i \in (A-A_i)^+$, akkor $A_i$ \textbf{belső idegen attribútum}(implied extraneous attribute), viszont ha csak idegen, de nem belső, akkor \textbf{külső idegen attribútum}(nonimplied extraneous attribute).
+Legyen $R(A)$ egy relációséma és $F$ függőségi halmaz, illetve $X,Y \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy egy $A_i$ \textbf{idegen attribútum} (extraneous attribute) egy $X \longrightarrow Y$ $F$ feletti függőségben, ha $A \in (A-A_i)^+$. Ha $A_i \in (A-A_i)^+$, akkor $A_i$ \textbf{belső idegen attribútum} (implied extraneous attribute), viszont ha csak idegen, de nem belső, akkor \textbf{külső idegen attribútum} (nonimplied extraneous attribute).
 \end{defi}
 
 \begin{pld}
@@ -134,8 +137,8 @@ Vegyük $R(a,b,c)$ relációsémát és $\{a,b\} \longrightarrow \{c\}, \{a\} \l
 Illetve vegyünk egy másik függőségi halmazt, melynek elemei $\{a,b\} \longrightarrow \{c\}, \{a\} \longrightarrow \{b\}$. Ekkor $b$ belső idegen attribútum a $\{a,b\} \longrightarrow \{c\}$ függőségben.
 \end{pld}
 
-\begin{defi}[Fölösleges függőség]
-Legyen $R(A)$ relációséma és $F$ függőségi halmaz, illetve $X,Y,Z \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy $X \longrightarrow Z$ \textbf{fölösleges függőség} $F$-ben, ha létezik egy olyan $Y \longrightarrow Z$, amely segítségével $X \longrightarrow Y \in F^+$.
+\begin{defi}[Felesleges függőség]
+Legyen $R(A)$ relációséma és $F$ függőségi halmaz, illetve $X,Y,Z \subseteq A$ részhalmazok. Ekkor azt mondjuk, hogy $X \longrightarrow Z$ \textbf{felesleges függőség} $F$-ben, ha létezik egy olyan $Y \longrightarrow Z$, amely segítségével $X \longrightarrow Y \in F^+$.
 \end{defi}
 
 \begin{defi}[Teljes és részleges függőség]
@@ -161,7 +164,9 @@ Egy relációséma normálformái az alábbiak:
 \end{defi}
 
 \begin{megj}
-A szakdolgozat \textbf{2NF}, \textbf{3NF} és \textbf{BCNF} normalizálással foglalkozik, de ezenkívül még létezik \textbf{4NF}, \textbf{ETNF}, \textbf{5NF}, \textbf{DKNF} és \textbf{6NF} normálformák is, viszont ezekre itt nem térek ki.
+A szakdolgozat \textbf{2NF}, \textbf{3NF} és \textbf{BCNF} normalizálással foglalkozik, de ezenkívül még létezik \textbf{4NF}, \textbf{ETNF}, \textbf{5NF}, és \textbf{6NF} normálformák is
+\footnote{Link:\href{https://tudasbazis.sulinet.hu/hu/szakkepzes/informatika/adatbazis-kezeles/a-normalizalas-folyamata/normal-formak}{https://tudasbazis.sulinet.hu/hu/szakkepzes/informatika/adatbazis-kezeles/a-normalizalas-folyamata/normal-formak}}
+\footnote{Link:\href{https://web.archive.org/web/20120406123712/http://www.dbdebunk.com/page/page/621935.htm}{https://web.archive.org/web/20120406123712/http://www.dbdebunk.com/page/page/621935.htm}}, viszont ezekre itt nem térek ki.
 \end{megj}
 
 \begin{tet}[A normálformák közti összefüggés]

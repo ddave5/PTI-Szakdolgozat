@@ -1,7 +1,8 @@
-\chapter{Moodle általános tudnivalók \cite{MoodleDev}}
+\chapter{Moodle általános tudnivalók}
 
 A moodle egy oktatási célokra szolgáló open source webes alapú tananyagkezelő rendszer. A szerveroldali vezérlés PHP nyelven lett implementálva és SQL adatbázist használ. Széles körben elterjedt az ingyenessége és a könnyen bővíthetősége miatt az iskolákban, de még munkahelyeken is használják. Tanulóknak, tanároknak és adminisztrátoroknak is ajánlják, korszerű plug-inek tölthetőek le, személyre szabott oktatási felület hozható létre, a kurzusok dinamikusan változtathatók és így tovább. \par
-Ebben a fejezetben a Moodle rendszerről, illetve a Moodle plug-in fejlesztésről lesz leginkább szó.
+Ebben a fejezetben a Moodle rendszerről, illetve a Moodle plug-in fejlesztésről lesz leginkább szó. \par
+Ezen rész \cite{MoodleDev} Moodle készítői által létrehozott kurzus segítségével lett bemutatva.
 
 \section{A Moodle telepítése}
 
@@ -15,7 +16,7 @@ Mivel a Moodle PHP nyelven íródott és SQL szervert használ, így az alábbi 
 A Moodle forráskódját a weblapjukról is be lehet tölteni, de Gitről is le lehet klónozni az alábbi paranccsal:
 
 \begin{center}
-git clone --branch MOODLE\_39\_STABLE git://git.moodle.org/moodle.git
+git clone $--$branch MOODLE\_39\_STABLE git://git.moodle.org/moodle.git
 \end{center}
 
 Ezután egy böngészőben történő installálást követően már tudjuk is használni.\par
@@ -23,7 +24,7 @@ Minden egyes indításkor ellenőrzi a Moodle, hogy az adott pluginek megfelelő
 
 \section{A Moodle felépítése}
 
-A Moodle-ben az M betű a modularitást jelenti. Ez alatt azt értjük, hogy a Moodle egyes részei egyes modulok, ezeket látja a felhasználó. Ezek a modulok kapcsolatban állhatnak egymással, vagy lehetnek teljesen különálló részek. Ezeket a modulokat szokás Plug-innek nevezni. A Moodle-ben vannak beépített pluginek, ilyen például a naptár, a quiz, és így tovább. Ezek teszik teszik ki a fájlrendszerének körülbelül a felét, a maradék részt az őket összefogó és irányító rendszerfájlokból adódik. Az alábbi ábra jól illusztrálja ezt:
+A Moodle-ben az M betű a modularitást jelenti. Ez alatt azt értjük, hogy a Moodle egyes részei egyes modulok, ezeket látja a felhasználó. Ezek a modulok kapcsolatban állhatnak egymással, vagy lehetnek teljesen különálló részek. Ezeket a modulokat szokás Plug-innek nevezni. A Moodle-ben vannak beépített pluginek, ilyen például a naptár, a quiz, és így tovább. Ezek teszik ki a fájlrendszerének körülbelül a felét, a maradék részt az őket összefogó és irányító rendszerfájlokból adódik. Az alábbi ábra jól illusztrálja ezt:
 
 \begin{figure}
     \centering
@@ -94,7 +95,7 @@ Ezen keresztül lehet látni, hogy az $id$ adattag megkapja a $42$ értéket, a 
 
 Ez a fájl tartalmazza az adatbázis, session-ök, jelenlegi kurzusok, témák és nyelvek inicializálását és ezekhez kapcsolódó adattagokat, funkciókat. Pontosítva, a config.php-n keresztül történik a többi főbb php file meghívásra, melyeken keresztül tudjuk a Moodle főbb részeit elérni. \par
 
-Ezenkívül biztonsági okokból a fejlesztő nem tudja elérni a \texttt{\$\_GET},  \texttt{\$\_POST} és  \texttt{\$\_REQUEST} paramétereit, helyette a Moodle biztosít egy \texttt{require\_param()} és \texttt{optional\_param()} függvényeket. Ezek meghívásával tudjuk a megfelelő adattagnak a címsorban lévő értéket felvetetni. A függvényeknek meg kell adni a címsorban szereplő kulcsszót, amely alapján veszik fel az értéket (A példánkban ez az $id$ volt), egy kezdőértéket, ha nem találna ilyet és egy típust, hogy milyen értéket vegyen fel. Ezekből rengeteg típus van, a leggyakoribbak:
+Ezenkívül biztonsági okokból a fejlesztő nem tudja elérni a \texttt{\$\_GET},  \texttt{\$\_POST} és \hfill \break \texttt{\$\_REQUEST} paramétereit, helyette a Moodle biztosít egy \texttt{require\_param()} és \hfill \break \texttt{optional\_param()} függvényeket. Ezek meghívásával tudjuk a megfelelő adattagnak a címsorban lévő értéket felvetetni. A függvényeknek meg kell adni a címsorban szereplő kulcsszót, amely alapján veszik fel az értéket (A példánkban ez az $id$ volt), egy kezdőértéket, ha nem találna ilyet és egy típust, hogy milyen értéket vegyen fel. Ezekből rengeteg típus van, a leggyakoribbak:
 
 \begin{itemize}
     \item \texttt{PARAM\_INT}: Integert váró paraméter
@@ -164,7 +165,7 @@ parancs szükséges, viszont a index.php "törzséhez" nem kell külön az \text
 \begin{figure}
     \centering
     \includegraphics[scale=0.9]{Fejezetek/Images/print.png}
-    \caption{Kiíratási formák a Moodle-ben\cite{MoodleTutorial}}
+    \caption{Kiíratási formák a Moodle-ben \cite{MoodleTutorial}}
 \end{figure}
 
 Ezenkívül lehetőségünk van különböző HTML megjelenítést és logikai elkülönítést segítő függvényeket is meghívni, ezt a html\_writer osztály-ban lévő függvények segítségével tudjuk megtenni. Például
@@ -175,7 +176,7 @@ kiíratás segítségével egy új input taget tudubk létrehozni, amely szöveg
 
 \subsection{Adatbázis használata}
 
-A Moodle-ben egy adatbázis létrehozásához és módosításához létrehoztak egy XMLDB szerkesztőt, hogy azon keresztül generáljon XML fájlokat és azok megfeleljenek a Moodle-ben használt szabályoknak. Ezt a Portálkezelés -> Fejlesztés -> XMLDB-szerkesztő menüponton keresztül tudjuk elérni. Ezekhez tartozó szabályokból sok van, néhány közülük:
+A Moodle-ben egy adatbázis létrehozásához és módosításához létrehoztak egy XMLDB szerkesztőt, hogy azon keresztül generáljon XML fájlokat és azok megfeleljenek a Moodle-ben használt szabályoknak. Ezt a Portálkezelés/Fejlesztés/XMLDB-szerkesztő menüponton keresztül tudjuk elérni. Ezekhez tartozó szabályokból sok van, néhány közülük:
 
 \begin{itemize}
     \item Minden táblának a neve az alábbi módon kell kinéznie: \hfill \break plugintípus\_pluginnév\_tárolniKívántAdat.
@@ -218,7 +219,7 @@ A menübár egy fa struktúrával felépített UI amelynek 3 részét különbö
 
 Ha szeretnénk az oldalhoz menüsort beállítani, azt a \$PAGE->navigation->add() függvény meghívásával tudjuk megtenni, amelybe egy linket kell belemásolni, illetve ha szeretnénk saját menübárt, akkor azt a lib.php fájlban kell függvények formájában implementálni. \par
 
-Az adminisztrátori beállításokat a settings.php-ban kell létrehozni, a fejlesztői beállításokat a config.php-ban. Ezek alapján könnyebben szét lehet szedni, hogy melyek a plugin tényleges működése és melyek annak tesztelésére szolgálnak. A configban történt módosításokat és adattagok értékeinek tárolására a config tábla van fenttartva és a \$CFG adattagban történik a meghívása. Ebben tudjuk a get\_config() és set\_config() segítségével lekérni és módosítani. Az adminisztrációs beállítások az admin\_category fa struktúrájú objektumban tárolódnak, melynek a gyökéreleme az \$ADMIN objektum és ezen keresztül tudjuk lekérni változókat. \par
+Az adminisztrátori beállításokat a settings.php-ban kell létrehozni, a fejlesztői beállításokat a config.php-ban. Ezek alapján könnyebben szét lehet szedni, hogy melyek a plugin tényleges működése és melyek annak tesztelésére szolgálnak. A configban történt módosításokat és adattagok értékeinek tárolására a config tábla van fenttartva és a \$CFG adattagban történik a meghívása. Ebben tudjuk a \texttt{get\_config()} és \texttt{set\_config()} segítségével lekérni és módosítani. Az adminisztrációs beállítások az admin\_category fa struktúrájú objektumban tárolódnak, melynek a gyökéreleme az \$ADMIN objektum és ezen keresztül tudjuk lekérni változókat. \par
 
 A verziókövetés a version.php file-ban történik. Miven verziószám az alábbi alakban nézz ki YYYYMMDDXX. Ha történik valamilyen szignifikáns változtatás, például adatbázisséma változás, egy új adatbázis létrehozása vagy új elem hozzáadása, akkor léptetni kell a verziószámot egyaránt. A Moodle-ben nincs arra lehetőség, hogy a verziószámot csökkentsük, mindig a következő verziónak "nagyobbnak" kell lennie, mint az aktuális. A nagyobb alatt azt értjük, hogy vagy a dátumnak kell frissebbnek lennie, mint az előző verziószámban lévő, vagy ha a dátum megegyezik, akkor az XX helyén lévő számnak kell nagyobbnak lennie az előzőnél. Ezenkívül az XX helyén lévő számok segítségével tudunk új irányutakat létrehozni a plugin fejlesztésében. \par
 
